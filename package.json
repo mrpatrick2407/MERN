@@ -1,0 +1,24 @@
+{
+  "name": "yes",
+  "version": "1.0.0",
+  "description": "This is a new project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm",
+    "start":"node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrpatrick2407/new"
+  },
+  "author": "theo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrpatrick2407/new/issues"
+  },
+  "homepage": "https://github.com/mrpatrick2407/new/#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb":"latest"
+  }
+}

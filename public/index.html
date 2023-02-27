@@ -1,0 +1,20 @@
+<html> 
+    <head>
+         <style> 
+            .isloggedin{ color :aqua; text-shadow: 10px 10px 50px black; } 
+            .isloggedout{ visibility: hidden; } 
+            .isloggedout::after{ visibility: visible; content: "Sorry to see you go :("; letter-spacing: 10px; color: black; } 
+        </style> 
+        <script src="https://unpkg.com/react@16/umd/react.development.js">
+             </script> <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"> </script> 
+             <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"> </script>
+    </head> 
+             <body> 
+                <div id="con"> </div> 
+                <script type="text/babel"> 
+                    const isactive=true; 
+                    const ele=( <div title="New one"> <h1 className={isactive?"isloggedoin":"isloggedout"}>Hello World</h1> </div> );
+                     ReactDOM.render(ele,document.getElementById("con")); 
+                    </script> 
+            </body> 
+</html>

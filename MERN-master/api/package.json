@@ -1,0 +1,46 @@
+{
+  "name": "yes",
+  "version": "1.0.0",
+  "description": "This is a new project",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm",
+    "start": "nodemon -w api/server.js -e js,graphql server.js",
+    "compile": "babel public/app.jsx --out-dir public",
+    "watch": "babel public/app.jsx --out-dir public --watch --verbose",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrpatrick2407/new"
+  },
+  "author": "theo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrpatrick2407/new/issues"
+  },
+  "homepage": "https://github.com/mrpatrick2407/new/#readme",
+  "dependencies": {
+    "apollo-server-express": "^3.12.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "graphql": "^16.6.0",
+    "mongodb": "^5.1.0",
+    "mongoose": "^7.0.2",
+    "nodemon": "^2.0.21",
+    "opencommit": "^1.1.24"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "eslint": "^8.36.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  }
+}

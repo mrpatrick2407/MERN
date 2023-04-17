@@ -1,5 +1,5 @@
 import IssueFilter from './IssueFilter.jsx';
-import IssueTable from './IssueTable.js';
+import IssueTable from './IssueTable.jsx';
 import IssueAdd from './IssueAdd.jsx'; 
 import URLSearchParams from 'url-search-params';
 import React from 'react';

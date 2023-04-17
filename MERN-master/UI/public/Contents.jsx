@@ -1,9 +1,9 @@
 import {Switch,Route,Redirect,useLocation} from 'react-router-dom'
 import IssueList from './IssueList.jsx';
-import IssueReport from './IssueReport.js';
+import IssueReport from './IssueReport.jsx';
 import IssueEdit from './IssueEdit.jsx';
 import {motion,AnimatePresence} from 'framer-motion'
-import IssueDetails from './IssueDetail.jsx'
+
 
 function LocationProvider({children}){
     return (<AnimatePresence>{children}</AnimatePresence>)

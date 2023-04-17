@@ -1,3 +1,4 @@
+import Numinput from "./NumInput.jsx";
 import { graphqlendpoint } from "./graphqlendppoint";
 import {Link} from 'react-router-dom'
 export default class IssueEdit extends React.Component {
@@ -12,11 +13,11 @@ export default class IssueEdit extends React.Component {
           due: '',
           description: '',
           _id: '',
-          status: 'New',
+          status: '',
           effort: '',
         }
       };
-    this.onchange = this.onchange.bind(this);
+    this.onChange = this.onChange.bind(this);
     this.handler=this.handler.bind(this);
   }
   componentDidMount() {
@@ -28,12 +29,16 @@ export default class IssueEdit extends React.Component {
     }
   }
 
-  onchange(e){
-   
+  onChange(e,val){
+   const {name,value:test}=e.target;
+   const value = Number.isNaN(val) ?test:val;
+   this.setState(prevState=>({issue:{...prevState.issue,[name]:value}}))
   }
 
   handler(e){
-
+    e.preventDefault();
+    const issue=this.state.issue;
+    console.log(issue);
 
   }
   async loaddata() {
@@ -58,7 +63,7 @@ export default class IssueEdit extends React.Component {
         const { issue } = data;
         issue.due = issue.due ? issue.due.toDateString() : "";
         issue.created = issue.created ? issue.created.toDateString() : "";
-        issue.effort = issue.effort != null ? issue.effort.toString() : "";
+        
         issue.owner = issue.owner != null ? issue.owner : "";
         issue.description = issue.description != null ? issue.description : "";
         this.setState({ issue });
@@ -86,7 +91,7 @@ export default class IssueEdit extends React.Component {
             <tr>
               <td>Status:</td>
               <td>
-                <select name="status" value={issue.status} onchange={this.onchange}>
+                <select name="status" value={issue.status} onChange={this.onChange}>
                   <option value="New">New</option>
                   <option value="Assigned">Assigned</option>
                   <option value="Fixed">Fixed</option>
@@ -97,19 +102,19 @@ export default class IssueEdit extends React.Component {
             <tr>
               <td>Owner:</td>
               <td>
-                <input name="owner" value={issue.owner} onchange={this.onchange} />
+                <input name="owner" value={issue.owner} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
               <td>Effort:</td>
               <td>
-                <input name="effort" value={issue.effort} onchange={this.onchange} />
+                <Numinput key={issue.id} name="effort" value={issue.effort} onChange={this.onChange}  />
               </td>
             </tr>
             <tr>
               <td>Due:</td>
               <td>
-                <input name="due" value={issue.due} onchange={this.onchange} />
+                <input name="due" value={issue.due} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
@@ -119,7 +124,7 @@ export default class IssueEdit extends React.Component {
                   size={50}
                   name="title"
                   value={issue.title}
-                  onchange={this.onchange}
+                  onChange={this.onChange}
                 />{" "}
               </td>{" "}
             </tr>{" "}
@@ -133,7 +138,7 @@ export default class IssueEdit extends React.Component {
                   cols={50}
                   name="description"
                   value={issue.description}
-                  onchange={this.onchange}
+                  onChange={this.onChange}
                 />{" "}
               </td>{" "}
             </tr>{" "}

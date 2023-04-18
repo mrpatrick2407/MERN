@@ -15,10 +15,12 @@ export default class IssueEdit extends React.Component {
           _id: '',
           status: '',
           effort: '',
-        }
+        },
+        invalidmessage:{}
       };
     this.onChange = this.onChange.bind(this);
     this.handler=this.handler.bind(this);
+    this.onValidityChange = this.onValidityChange.bind(this);
   }
   componentDidMount() {
     this.loaddata();
@@ -31,9 +33,18 @@ export default class IssueEdit extends React.Component {
 
   onChange(e,val){
    const {name,value:test}=e.target;
-   const value = Number.isNaN(val) ?test:val;
+   
+
+   const value = Number.isNaN(val) ?val:test;
+   console.log(value+"from parent"+name)
    this.setState(prevState=>({issue:{...prevState.issue,[name]:value}}))
   }
+
+  onValidityChange(e,val){
+
+  }
+
+
 
   handler(e){
     e.preventDefault();
@@ -77,7 +88,7 @@ export default class IssueEdit extends React.Component {
   render() {
     const issue = this.state.issue;
     var created=issue.created;
-    console.log(created)
+   
     return (
         
         <form onSubmit={this.handler}>
@@ -91,7 +102,7 @@ export default class IssueEdit extends React.Component {
             <tr>
               <td>Status:</td>
               <td>
-                <select name="status" value={issue.status} onChange={this.onChange}>
+                <select name="status"  value={issue.status} onChange={this.onChange}>
                   <option value="New">New</option>
                   <option value="Assigned">Assigned</option>
                   <option value="Fixed">Fixed</option>
@@ -102,7 +113,7 @@ export default class IssueEdit extends React.Component {
             <tr>
               <td>Owner:</td>
               <td>
-                <input name="owner" value={issue.owner} onChange={this.onChange} />
+                <input  name="owner" value={issue.owner} onChange={this.onChange} />
               </td>
             </tr>
             <tr>

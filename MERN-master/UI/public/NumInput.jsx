@@ -12,27 +12,33 @@ function unformat(str){
 export default class Numinput extends React.Component {
     constructor(props){
         super(props);
+        this.onChange=this.onChange.bind(this);
+        this.onBlur=this.onBlur.bind(this);
         this.state={value:format(props.value)}
+        console.log(format(props.value))
     }
     onChange(e){
+        
         if (e.target.value.match(/^\d*$/)) {
-            this.setState({ value: e.target.value });
-            console.log("hasdi");
+            const val=e.target.value;
+            this.setState({ value: val });
         }
     }
 
     onBlur(e){
         const {onChange}=this.props;
         const value = this.state.value;
+        console.log(value+"from child");
         onChange(e, unformat(value))
     }
     render(){
         const {value}=this.state;
-        console.log(value)
+        
         return(
             <input 
             type="text"
             value={value}
+            name={this.props.name}
             onChange={this.onChange}
             onBlur={this.onBlur}/>
         )

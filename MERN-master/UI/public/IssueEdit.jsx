@@ -100,7 +100,7 @@ if(name=='due'||name=='created'){
    console.log("parent edit"+issue.due)
    let messgae;
    if(Object.keys(invalidfields).length!==0){
-    messgae=(<div>Please enter the correct date</div>)
+    messgae=(<div className="error">Please enter the correct date</div>)
    }
     return (
         

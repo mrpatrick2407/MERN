@@ -4,15 +4,19 @@ function displayFormat(date) {
   
   if (date instanceof Date) {
     return date.toDateString();
-  } else {
+  } else if(date!=null) {
     console.log(typeof date)
     return new Date(date).toDateString();
+  }else{
+    return '';
   }
 }
 
 
 function editFormat(date) {
-  if (date instanceof Date) {
+  console.log(date+"skad")
+  if (date instanceof Date && date!='null') {
+    
     return date.toISOString().substr(0, 10);
   } else {
    

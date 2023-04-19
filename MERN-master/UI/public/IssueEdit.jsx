@@ -1,3 +1,4 @@
+import DateInput from "./DateInput.jsx";
 import Numinput from "./NumInput.jsx";
 import { graphqlendpoint } from "./graphqlendppoint";
 import {Link} from 'react-router-dom'
@@ -16,7 +17,7 @@ export default class IssueEdit extends React.Component {
           status: '',
           effort: '',
         },
-        invalidmessage:{}
+        invalidfields:{}
       };
     this.onChange = this.onChange.bind(this);
     this.handler=this.handler.bind(this);
@@ -33,15 +34,22 @@ export default class IssueEdit extends React.Component {
 
   onChange(e,val){
    const {name,value:test}=e.target;
-   
-
+   let rvalue;
+if(name=='due'||name=='created'){
+  rvalue=new Date(val).toISOString();
+}
    const value = Number.isNaN(val) ?val:test;
    console.log(value+"from parent"+name)
-   this.setState(prevState=>({issue:{...prevState.issue,[name]:value}}))
+   this.setState(prevState=>({issue:{...prevState.issue,[name]:rvalue}}))
   }
 
-  onValidityChange(e,val){
-
+  onValidityChange(e,valid){
+    const {name}=e.target;
+    this.setState((prevState)=>{
+      const invalidfields={...prevState.invalidfields,[name]:!valid}
+      if(valid) delete invalidfields[name];
+      return {invalidfields}
+    })
   }
 
 
@@ -72,7 +80,7 @@ export default class IssueEdit extends React.Component {
     const data = await graphqlendpoint(query, vars);
     if (data) {
         const { issue } = data;
-        issue.due = issue.due ? issue.due.toDateString() : "";
+        //issue.due = issue.due ? issue.due.toDateString() : "";
         issue.created = issue.created ? issue.created.toDateString() : "";
         
         issue.owner = issue.owner != null ? issue.owner : "";
@@ -88,7 +96,12 @@ export default class IssueEdit extends React.Component {
   render() {
     const issue = this.state.issue;
     var created=issue.created;
-   
+   const {invalidfields}=this.state;
+   console.log("parent edit"+issue.due)
+   let messgae;
+   if(Object.keys(invalidfields).length!==0){
+    messgae=(<div>Please enter the correct date</div>)
+   }
     return (
         
         <form onSubmit={this.handler}>
@@ -125,7 +138,7 @@ export default class IssueEdit extends React.Component {
             <tr>
               <td>Due:</td>
               <td>
-                <input name="due" value={issue.due} onChange={this.onChange} />
+                <DateInput onValidityChange={this.onValidityChange} key={issue.id} name="due" value={issue.due} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
@@ -162,6 +175,7 @@ export default class IssueEdit extends React.Component {
             </tr>{" "}
           </tbody>{" "}
         </table>{" "}
+        {messgae}
         <Link to={`/edit/${issue.id - 1}`}>Prev</Link> {" | "}{" "}
         <Link to={`/edit/${issue.id + 1}`}>Next</Link>{" "}
       </form>

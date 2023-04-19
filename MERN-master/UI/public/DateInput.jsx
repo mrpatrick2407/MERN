@@ -1,15 +1,29 @@
 import React from 'react';
 
 function displayFormat(date) {
-  return (date != null) ? date.toDateString() : '';
+  
+  if (date instanceof Date) {
+    return date.toDateString();
+  } else {
+    console.log(typeof date)
+    return new Date(date).toDateString();
+  }
 }
 
+
 function editFormat(date) {
-  return (date != null) ? date.toISOString().substr(0, 10) : '';
+  if (date instanceof Date) {
+    return date.toISOString().substr(0, 10);
+  } else {
+   
+    return '';
+  }
 }
+
 
 function unformat(str) {
   const val = new Date(str);
+  console.log(val.getTime())
   return Number.isNaN(val.getTime()) ? null : val;
 }
 
@@ -17,33 +31,44 @@ export default class DateInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: editFormat(props.value),
+      value:editFormat( props.value),
       focused: false,
       valid: true,
     };
+    console.log("type"+typeof(props.value)+props.value);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
   onFocus() {
+    console.log('onFocus')
     this.setState({ focused: true });
   }
 
   onBlur(e) {
+    console.log('onblur')
+
     const { value, valid: oldValid } = this.state;
     const { onValidityChange, onChange } = this.props;
     const dateValue = unformat(value);
-    const valid = value === '' || dateValue != null;
-    console.log(dateValue)
-    if (valid !== oldValid && onValidityChange) {
+    const valid = value === '' || dateValue instanceof Date;
+    console.log(dateValue+"dateValue")
+    if (valid !== oldValid || onValidityChange) {
+      console.log("onValidityChange")
       onValidityChange(e, valid);
     }
-    this.setState({ focused: false, valid });
-    if (valid) onChange(e, dateValue);
+    this.setState({ focused: false, valid:true });
+    if (valid){
+      console.log("onvalid")
+      
+      onChange(e, dateValue);
+    }
   }
 
   onChange(e) {
+    console.log('onchange')
+
     if (e.target.value.match(/^[\d-]*$/)) {
       this.setState({ value: e.target.value });
     }
@@ -53,8 +78,15 @@ export default class DateInput extends React.Component {
     const { valid, focused, value } = this.state;
     const { value: origValue, name } = this.props;
     const className = (!valid && !focused) ? 'invalid' : null;
-    const displayValue = (focused || !valid) ? value
-      : displayFormat(origValue);
+    let displayValue
+    if(focused||!valid){
+      console.log("valid if");
+      displayValue=value;
+    }else{
+      console.log("else plays"+origValue);
+      displayValue =displayFormat(origValue);
+      console.log(displayValue+" displayValue")
+    }
     return (
       <input
         type="text"

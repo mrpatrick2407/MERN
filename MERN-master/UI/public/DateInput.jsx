@@ -51,7 +51,7 @@ export default class DateInput extends React.Component {
   }
 
   onBlur(e) {
-    console.log('onblur')
+    console.log('onblur'+e.target.value)
 
     const { value, valid: oldValid } = this.state;
     const { onValidityChange, onChange } = this.props;
@@ -71,7 +71,7 @@ export default class DateInput extends React.Component {
   }
 
   onChange(e) {
-    console.log('onchange')
+    console.log('onchange'+e.target.value)
 
     if (e.target.value.match(/^[\d-]*$/)) {
       this.setState({ value: e.target.value });

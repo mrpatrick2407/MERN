@@ -3,9 +3,16 @@ import IssueRow from './IssueRow.jsx'
 
 export default function IssueTable (props)
 {
+        const closeIssue=props.closeIssue;
+         const deleteissue=props.deleteissue;
 
         console.log('hi');
-        const issueRows=props.issues.map(issue=><IssueRow key={issue.id} issue={issue}/> );
+        const issueRows=props.issues.map((issue,index)=><IssueRow 
+        key={issue.id} 
+        issue={issue}
+        closeIssue={closeIssue}
+        deleteissue={deleteissue}
+        index={index}/> );
         return(
             <table className="bordered-table">
                 <thead>

@@ -16,5 +16,9 @@ db.issues.createIndex({ id: 1 }, { unique: true });
 db.issues.createIndex({ status: 1 });
 db.issues.createIndex({ created: 1 });
 db.issues.createIndex({ owner: 1 });
-const issue=db.issues.find({ id: 2 });
+const issue=db.issues.find({ });
+//const issues=db.issues.deleteOne({ id: 2});
+//console.log("deleted"+issues.deletedCount+"sd");
 console.log(issue);
+db.myFirstDatabase.remove({})
+//connect :mongosh "mongodb+srv://cluster0.5ggmpye.mongodb.net/issuetracker" --apiVersion 1 --username theophilus .\init.mongo.js

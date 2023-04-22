@@ -21,7 +21,7 @@ export default class Numinput extends React.Component {
         
         if (e.target.value.match(/^\d*$/)) {
             const val=e.target.value;
-            this.setState({ value: val });
+           this.setState({ value: val });
         }
     }
 

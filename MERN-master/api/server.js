@@ -45,6 +45,28 @@ async function issueList(_,{status,effortmin,effortmax}) {
   return issuesDb;
 }
 
+async function issueDelete(_,{id}){
+  const issue = await db.collection('issues').findOne({id});
+  if(issue){
+    issue.deleted=new Date();
+    const res= await db.collection('issuesdeleted').insertOne({issue});
+    if(res){
+      const del= await db.collection('issues').deleteOne({id});
+      if(del){
+        return true
+      }else{
+        return false;
+      }
+    }
+    else{
+      return false;
+    }
+  }else{
+    return false;
+  }
+}
+
+
 async function connecttodb() {
   const client = new MongoClient(url);
   await client.connect();
@@ -77,6 +99,18 @@ async function issueAdd(_, { issue }) {
   const savedIssue = await db.collection('issues').findOne({ _id: res.insertedId });
   return savedIssue;
 }
+
+
+async function issueUpdate(_,{id,Changes}){
+  if(Changes.title||Changes.status||Changes.owner ||Changes.description){
+    const issue = await db.collection('issues').findOne({ id: id})
+    Object.assign(issue,Changes)
+
+  }
+  await db.collection('issues').updateOne({id: id},{$set:Changes})
+  const savedissue=await db.collection('issues').findOne({id: id});
+  return savedissue;
+}
 // function e
 const resolvers = {
   Query: {
@@ -96,6 +130,8 @@ const resolvers = {
   },
   Mutation: {
     setAboutMessage:about.setAboutMessage,
+    issueUpdate,
+  issueDelete,
 
     examplecatchfrommutation: () => {
       const { val } = exports;

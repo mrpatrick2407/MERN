@@ -2,6 +2,10 @@ import DateInput from "./DateInput.jsx";
 import Numinput from "./NumInput.jsx";
 import { graphqlendpoint } from "./graphqlendppoint";
 import {Link} from 'react-router-dom'
+import TextInput from "./TextInput.jsx";
+import {Button} from 'react-bootstrap'
+
+
 export default class IssueEdit extends React.Component {
   constructor() {
     super();
@@ -35,12 +39,20 @@ export default class IssueEdit extends React.Component {
   onChange(e,val){
    const {name,value:test}=e.target;
    let rvalue;
-if(name=='due'||name=='created'){
+   console.log("valll"+val+"testttt"+test)
+if((name=='due'||name=='created') && val!==null){
   rvalue=new Date(val).toISOString();
+  console.log("rrrrvalll"+rvalue)
+
 }
    const value = Number.isNaN(val) ?val:test;
    console.log(value+"from parent"+name)
+   if((name=='due'||name=='created') && val!==null){
    this.setState(prevState=>({issue:{...prevState.issue,[name]:rvalue}}))
+   }else{
+   this.setState(prevState=>({issue:{...prevState.issue,[name]:value}}))
+
+   }
   }
 
   onValidityChange(e,valid){
@@ -54,10 +66,30 @@ if(name=='due'||name=='created'){
 
 
 
-  handler(e){
+  async handler(e){
     e.preventDefault();
     const issue=this.state.issue;
-    console.log(issue);
+    const query=`mutation IssueUpdate($id: Int!, $changes: Issueupdateinput!) {
+      issueUpdate(id: $id, Changes: $changes) {
+        id title status owner effort created due description  
+        }
+      }`
+      const {_id,id,created,...changes}=issue;
+      const data= await graphqlendpoint(query,{id,changes})
+      console.log(data.issueUpdate.title)
+     if(data){
+        this.setState({issue: {
+          title:data.issueUpdate.title,
+          status:data.issueUpdate.status,
+          description:data.issueUpdate.description,
+          owner:data.issueUpdate.owner,
+          effort:data.issueUpdate.effort,
+          due:data.issueUpdate.due,
+          
+        }});
+        
+        
+      }
 
   }
   async loaddata() {
@@ -126,7 +158,7 @@ if(name=='due'||name=='created'){
             <tr>
               <td>Owner:</td>
               <td>
-                <input  name="owner" value={issue.owner} onChange={this.onChange} />
+                <TextInput key={issue.id}  name="owner" value={issue.owner} onChange={this.onChange} />
               </td>
             </tr>
             <tr>
@@ -144,7 +176,8 @@ if(name=='due'||name=='created'){
             <tr>
               <td>Title:</td>
               <td>
-                <input
+                <TextInput
+                key={issue.id}
                   size={50}
                   name="title"
                   value={issue.title}
@@ -157,7 +190,9 @@ if(name=='due'||name=='created'){
               <td>Description:</td>{" "}
               <td>
                 {" "}
-                <textarea
+                <TextInput
+                tag="textarea"
+                key={issue.id}
                   rows={8}
                   cols={50}
                   name="description"

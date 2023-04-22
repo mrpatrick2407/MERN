@@ -6,7 +6,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import IssueDetails from './IssueDetail.jsx'
 import {graphqlendpoint} from './graphqlendppoint.js'
-
+import {FormLabel} from'react-bootstrap'
 
 
 
@@ -16,7 +16,8 @@ import {graphqlendpoint} from './graphqlendppoint.js'
         super();
         this.state={issues:[]}
         this.createissue=this.createissue.bind(this);
-        
+        this.closeIssue=this.closeIssue.bind(this);
+        this.deleteissue=this.deleteissue.bind(this);
     }
     componentDidMount(){
         this.loadData()
@@ -57,7 +58,54 @@ import {graphqlendpoint} from './graphqlendppoint.js'
     }
     }
 
+    async closeIssue(index){
+        const issues=this.state.issues;
+        console.log(index);
+        const mutation =`mutation IssueUpdate($id: Int!) {
+            issueUpdate(id: $id, Changes: {status:Closed}) {
+              id title status owner effort created due description  
+              }
+            }`;
+       const data =await graphqlendpoint(mutation,{id:issues[index].id});
+       if(data){
+        this.setState((prevState)=>{
+            const newState =[...prevState.issues];
+            newState[index] = data.issueUpdate;
+            return {issues: newState};
+        })
+       }else{
+        
+        this.loadData();
 
+       }
+    }
+
+    async deleteissue(index){
+        console.log("delete issue")
+        console.log(index);
+        const mutation=`mutation IssueDelete($id: Int!) {
+            issueDelete(id: $id)
+          }`
+          const {location:{pathname,search},history}=this.props;
+          console.log(pathname+search)
+          const {issues}=this.state;
+          const {id}=issues[index];
+          const data= await graphqlendpoint(mutation,{id});
+          if(data){
+            this.setState((prevState)=>{
+                const newlist=[...prevState.issues];
+
+                if(pathname==`/issues`){
+                    history.push({pathname:`/issues`,search:search})
+                }
+                newlist.splice(index, 1);
+                console.log(newlist)
+
+                return {issues:newlist};
+            });
+            
+          }
+    }
 
     async createissue(issue){
         
@@ -77,18 +125,16 @@ import {graphqlendpoint} from './graphqlendppoint.js'
         const { match } = this.props;
         return (
             <React.Fragment>
-                <h1>Issue Tracker</h1>
+                <h1><FormLabel>Issue Tracker</FormLabel></h1>
                 <hr/>
                 <IssueFilter/>
                 <hr/>
-                <IssueTable  issues={this.state.issues}/>
+                <IssueTable deleteissue={this.deleteissue} closeIssue={this.closeIssue}  issues={this.state.issues}/>
                 <hr/>
                 <IssueAdd createIssue={this.createissue}/>
                 <Switch>
               <Route path={`/issues/:id`} component={IssueDetails} />
                 </Switch>
-
-                
 
             </React.Fragment>
         );

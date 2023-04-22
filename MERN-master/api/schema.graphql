@@ -17,6 +17,14 @@ input Issueinput{
   due: GraphQLDate
   description: String
 }
+input Issueupdateinput{
+  title: String
+  status: statustype
+    owner: String
+  effort: Int
+  due: GraphQLDate
+  description: String
+}
 
 type Issue {
 _id:ID!
@@ -45,6 +53,7 @@ type Query {
 
 type Mutation {
   setAboutMessage(message: String!): String
-  
+  issueUpdate(id:Int!,Changes:Issueupdateinput!): Issue!
  examplecatchfrommutation:Int!
+ issueDelete(id:Int!):Boolean!
 }

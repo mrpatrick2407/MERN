@@ -1,6 +1,9 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params'
 import {withRouter} from 'react-router-dom';
+import {Button} from 'react-bootstrap'
+
+
 class IssueFilter extends React.Component{
     constructor({location:{search}}) {    
         super();
@@ -77,8 +80,8 @@ class IssueFilter extends React.Component{
                         {''}Effort Between{''}
                         <input onChange={this.onChangeeffortmin} value={effortmin} size={5}/>
                         <input onChange={this.onChangeeffortmax}  value={effortmax} size={5}/>
-                        <button onClick={this.applyFilter}>Apply</button>
-                        <button onClick={this.resetfilter}>Reset</button>
+                        <Button variant='primary' onClick={this.applyFilter}>Apply</Button>
+                        <Button  onClick={this.resetfilter}>Reset</Button>
                         
                     </div>
                 );

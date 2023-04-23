@@ -1,5 +1,5 @@
 import IssueRow from './IssueRow.jsx'
-
+import {Table} from 'react-bootstrap'
 
 export default function IssueTable (props)
 {
@@ -14,7 +14,7 @@ export default function IssueTable (props)
         deleteissue={deleteissue}
         index={index}/> );
         return(
-            <table className="bordered-table">
+            <Table striped bordered hover responsive="sm">
                 <thead>
                     <tr>
                         <th >ID</th>
@@ -32,7 +32,7 @@ export default function IssueTable (props)
                     {issueRows}
                     
                 </tbody>
-            </table>
+            </Table>
         );
     }
 

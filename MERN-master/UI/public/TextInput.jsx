@@ -1,3 +1,4 @@
+import { Form } from "react-bootstrap";
 function formatData(data){
     return data!=null?data:"";
 }
@@ -27,9 +28,11 @@ export default class TextInput extends React.Component{
     }
     render(){
         const {value} = this.state;
-        const { tag = 'input', ...props } = this.props;
+        const { tag = Form.Control ,...props } = this.props;
+        
         return React.createElement(tag, {
           ...props,
+          class:this.props.tag? "form-control":"",
           value,
           onBlur: this.onBlur,
           onChange: this.onChange,

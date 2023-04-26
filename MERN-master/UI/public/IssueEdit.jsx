@@ -3,9 +3,8 @@ import Numinput from "./NumInput.jsx";
 import { graphqlendpoint } from "./graphqlendppoint";
 import {Link} from 'react-router-dom'
 import TextInput from "./TextInput.jsx";
-import {Button} from 'react-bootstrap'
-
-
+import {Button, FormLabel} from 'react-bootstrap'
+import { Form,Card,InputGroup,Row,Col } from "react-bootstrap";
 export default class IssueEdit extends React.Component {
   constructor() {
     super();
@@ -78,7 +77,10 @@ if((name=='due'||name=='created') && val!==null){
       const data= await graphqlendpoint(query,{id,changes})
       console.log(data.issueUpdate.title)
      if(data){
+      console.log(data.issueUpdate.id)
         this.setState({issue: {
+          id:id,
+          created:created,
           title:data.issueUpdate.title,
           status:data.issueUpdate.status,
           description:data.issueUpdate.description,
@@ -135,10 +137,117 @@ if((name=='due'||name=='created') && val!==null){
     messgae=(<div className="error">Please enter the correct date</div>)
    }
     return (
+      <Col lg={6}>
+      <Card lg ={6}  sm={3} xs={3}    >
+
+     <Form  onSubmit={this.handler}>
+       <Card bg="secondary"> 
+        <Card.Title className="mb-3 mt-3 ms-3 me-3">{`Editing issue: ${issue.id}`}</Card.Title>
+       </Card>
+        <InputGroup className="mb-3 mt-3 ms-5 me-5" >
         
-        <form onSubmit={this.handler}>
-        <h3>{`Editing issue: ${issue.id}`}</h3>
-        <table>
+         
+             <InputGroup.Text style={{background:'grey',color:'white'}} bg="secondary">Created</InputGroup.Text> 
+
+          
+           <InputGroup.Text name="created">{issue.created}</InputGroup.Text> 
+          
+          </InputGroup>
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={6} sm={3} xs={3}>
+             <Form.Label >Owner </Form.Label>
+
+          </Col>
+           <Col lg ={6} sm={9} xs={9}>
+           <TextInput className="secondary" key={issue.id}  name="owner" value={issue.owner} onChange={this.onChange} />
+           </Col> 
+         </Row>
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={6}  sm={3} xs={3}>
+             <Form.Label >Status </Form.Label>
+
+          </Col>
+           <Col lg ={6}  sm={9} xs={9}>
+           <Form.Select  name="status" value={issue.status} aria-label="Default select example">
+           <option value="New">New</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="Fixed">Fixed</option>
+                  <option value="Closed">Closed</option>
+          </Form.Select>
+           </Col> 
+         </Row>
+        </Form.Group>
+        
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={6}  sm={3} xs={3}>
+             <Form.Label >Effort </Form.Label>
+
+          </Col>
+           <Col lg ={6}  sm={9} xs={9}>
+           <Numinput key={issue.id}  name="effort" value={issue.effort} onChange={this.onChange} />
+            
+           </Col> 
+         </Row>
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={6}  sm={3} xs={3}>
+             <Form.Label >Due </Form.Label>
+
+          </Col>
+           <Col lg ={6}  sm={9} xs={9}>
+           <DateInput onValidityChange={this.onValidityChange} key={issue.id}  name="due" value={issue.due} onChange={this.onChange} />
+
+           </Col> 
+         </Row>
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={6}  sm={3} xs={3}>
+             <Form.Label >Title </Form.Label>
+
+          </Col>
+           <Col lg ={6}  sm={9} xs={9}>
+           <TextInput  key={issue.id}  name="title" value={issue.title} onChange={this.onChange} />
+           </Col> 
+         </Row>
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={6}  sm={3} xs={3}>
+             <Form.Label >Description </Form.Label>
+
+          </Col>
+           <Col lg ={6}  sm={9} xs={12}>
+           <TextInput tag="textarea" key={issue.id} rows={3}  name="description" value={issue.description} onChange={this.onChange} />
+
+           </Col> 
+         </Row>
+         
+        </Form.Group>
+        <Form.Group className="mb-3 mt-3 ms-5 me-5" >
+         <Row >
+          <Col lg ={12}  sm={3} xs={3}>
+             <Button style={{width:'200px'}} type="submit" >Submit </Button>
+
+          </Col>
+           </Row>
+        </Form.Group>
+        {messgae}
+        <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id - 1}`}>Prev</Link> {" | "}{" "}
+        <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id + 1}`}>Next</Link>{" "}
+    </Form>
+        </Card>
+        </Col>
+    )
+  }
+}
+/*
+ <table>
           <tbody>
             <tr>
               <td>Created:</td>
@@ -210,10 +319,5 @@ if((name=='due'||name=='created') && val!==null){
             </tr>{" "}
           </tbody>{" "}
         </table>{" "}
-        {messgae}
-        <Link to={`/edit/${issue.id - 1}`}>Prev</Link> {" | "}{" "}
-        <Link to={`/edit/${issue.id + 1}`}>Next</Link>{" "}
-      </form>
-    )
-  }
-}
+     
+*/

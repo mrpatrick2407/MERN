@@ -1,3 +1,5 @@
+import { Form } from "react-bootstrap";
+
 function format(n){
 return n!=null?n.toString():'';
 }
@@ -35,7 +37,7 @@ export default class Numinput extends React.Component {
         const {value}=this.state;
         
         return(
-            <input 
+            <Form.Control 
             type="text"
             value={value}
             name={this.props.name}

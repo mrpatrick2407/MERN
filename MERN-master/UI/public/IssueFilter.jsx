@@ -1,7 +1,8 @@
 import React from 'react';
 import URLSearchParams from 'url-search-params'
 import {withRouter} from 'react-router-dom';
-import {Button,OverlayTrigger,Tooltip} from 'react-bootstrap'
+import {Button,FormGroup,OverlayTrigger,Tooltip} from 'react-bootstrap'
+import { Form,Card,InputGroup,Row,Col, } from "react-bootstrap";
 
 
 class IssueFilter extends React.Component{
@@ -69,21 +70,42 @@ class IssueFilter extends React.Component{
                 const effortmin=this.state.effortmin;
                   const effortmax=this.state.effortmax;
                 return(
-                    <div>Status:{''}
-                        <select value={states} onChange={this.update}>
+                    <Form>
+                        <Row>
+                        <Col lg={3}>
+                        <FormGroup>
+                            
+                            <Form.Label>Status</Form.Label>
+                        <Form.Select value={states} onChange={this.update}>
                             <option value="">(All)</option>
                             <option value="New">New</option>
                             <option value="Assigned">Assigned</option>
                             <option value="Fixed">Fixed</option>
                             <option value="Closed">Closed</option>
-                        </select>
-                        {''}Effort Between{''}
-                        <input onChange={this.onChangeeffortmin} value={effortmin} size={5}/>
-                        <input onChange={this.onChangeeffortmax}  value={effortmax} size={5}/>
+                        </Form.Select>
+                        </FormGroup>
+                        </Col>
+                        <Col lg={3}>
+                        
+                            
+                            <Form.Label>Effort Between</Form.Label>
+                        <InputGroup>
+                            
+                        <Form.Control onChange={this.onChangeeffortmin} value={effortmin} size={5}/>
+                        
+                        
+                       
+                            
+                        <InputGroup.Text lg={2}>-</InputGroup.Text>
+                        <Form.Control onChange={this.onChangeeffortmax}  value={effortmax} size={5}/>
+
+                        </InputGroup></Col>
+                        <Col lg={12}>
                         <Button variant='primary' onClick={this.applyFilter}>Apply</Button> 
                         <Button variant='light border border-primary' onClick={this.resetfilter}>Reset</Button>
-                        
-                    </div>
+                        </Col>
+                        </Row>
+                    </Form>
                 );
             }
         }

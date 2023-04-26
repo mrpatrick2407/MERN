@@ -14,7 +14,7 @@ export default function IssueTable (props)
         deleteissue={deleteissue}
         index={index}/> );
         return(
-            <Table striped bordered hover responsive="sm">
+            <Table striped bordered hover  responsive="sm">
                 <thead>
                     <tr>
                         <th >ID</th>

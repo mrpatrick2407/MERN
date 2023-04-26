@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form } from "react-bootstrap";
 
 function displayFormat(date) {
   
@@ -92,7 +93,7 @@ export default class DateInput extends React.Component {
       console.log(displayValue+" displayValue")
     }
     return (
-      <input
+      <Form.Control
         type="text"
         size={20}
         name={name}

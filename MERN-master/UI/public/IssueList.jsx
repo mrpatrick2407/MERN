@@ -7,7 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import IssueDetails from './IssueDetail.jsx'
 import {graphqlendpoint} from './graphqlendppoint.js'
 import {FormLabel} from'react-bootstrap'
-
+import {Card} from 'react-bootstrap'
 
 
 
@@ -125,13 +125,26 @@ import {FormLabel} from'react-bootstrap'
         const { match } = this.props;
         return (
             <React.Fragment>
-                <h1><FormLabel>Issue Tracker</FormLabel></h1>
-                <hr/>
+                <Card >
+                    <Card.Title>Filter</Card.Title>
+                    <Card.Body >
                 <IssueFilter/>
-                <hr/>
-                <IssueTable deleteissue={this.deleteissue} closeIssue={this.closeIssue}  issues={this.state.issues}/>
-                <hr/>
-                <IssueAdd createIssue={this.createissue}/>
+
+                    </Card.Body>
+                </Card>
+                <Card >
+                    
+                    <Card.Body >
+                         <IssueTable deleteissue={this.deleteissue} closeIssue={this.closeIssue}  issues={this.state.issues}/>
+
+                    </Card.Body>
+                </Card>
+                <Card >                    
+                    <Card.Body >
+                         <IssueAdd createIssue={this.createissue}/>
+                    </Card.Body>
+                </Card>
+            
                 <Switch>
               <Route path={`/issues/:id`} component={IssueDetails} />
                 </Switch>

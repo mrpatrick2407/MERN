@@ -1,14 +1,14 @@
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
-import IssueAdd from './IssueAdd.jsx'; 
 import URLSearchParams from 'url-search-params';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import IssueDetails from './IssueDetail.jsx'
 import {graphqlendpoint} from './graphqlendppoint.js'
-import {FormLabel} from'react-bootstrap'
+import {FormLabel, Nav, NavItem, Navbar} from'react-bootstrap'
 import {Card} from 'react-bootstrap'
 import Toast from './Toast.jsx';
+import IssueAdd from './IssueAdd.jsx';
 
 
   export default  class IssueList extends React.Component{
@@ -150,6 +150,11 @@ import Toast from './Toast.jsx';
         const toasttype=this.state.toasttype;
         return (
             <React.Fragment>
+                <Navbar bg='light'>
+                
+                <IssueAdd/>
+               
+                </Navbar>
                 <Card >
                     <Card.Title>Filter</Card.Title>
                     <Card.Body >
@@ -164,12 +169,9 @@ import Toast from './Toast.jsx';
 
                     </Card.Body>
                 </Card>
-                <Card >                    
-                    <Card.Body >
-                         <IssueAdd createIssue={this.createissue}/>
-                    </Card.Body>
-                </Card>
-            <Toast showing={toastshowing} className={toasttype} onDismiss={this.dismiss}>{toastmessage}</Toast>
+                         
+                    
+            <Toast type={toasttype} showing={toastshowing}  onDismiss={this.dismiss}>{toastmessage}</Toast>
                 <Switch>
               <Route path={`/issues/:id`} component={IssueDetails} />
                 </Switch>

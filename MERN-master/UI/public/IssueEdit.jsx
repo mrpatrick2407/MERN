@@ -285,7 +285,7 @@ if((name=='due'||name=='created') && val!==null){
           {messgae}
         </Form.Group>
         
-        <Toast variant={toasttype} showing={toastshowing}  onDismiss={this.dismiss}>{toastmessage}</Toast>
+        <Toast type={toasttype} showing={toastshowing}  onDismiss={this.dismiss}>{toastmessage}</Toast>
         <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id - 1}`}>Prev</Link> {" | "}{" "}
         <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id + 1}`}>Next</Link>{" "}
     </Form>

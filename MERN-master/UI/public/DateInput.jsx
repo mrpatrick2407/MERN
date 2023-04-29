@@ -6,7 +6,7 @@ function displayFormat(date) {
   if (date instanceof Date) {
     return date.toDateString();
   } else if(date!=null) {
-    console.log(typeof date)
+    //(typeof date)
     return new Date(date).toDateString();
   }else{
     return '';
@@ -15,7 +15,7 @@ function displayFormat(date) {
 
 
 function editFormat(date) {
-  console.log(date+"skad")
+  //(date+"skad")
   if (date instanceof Date && date!='null') {
     
     return date.toISOString().substr(0, 10);
@@ -28,7 +28,6 @@ function editFormat(date) {
 
 function unformat(str) {
   const val = new Date(str);
-  console.log(val.getTime())
   return Number.isNaN(val.getTime()) ? null : val;
 }
 
@@ -40,39 +39,39 @@ export default class DateInput extends React.Component {
       focused: false,
       valid: true,
     };
-    console.log("type"+typeof(props.value)+props.value);
     this.onFocus = this.onFocus.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
+   
   }
 
   onFocus() {
-    console.log('onFocus')
     this.setState({ focused: true });
   }
 
   onBlur(e) {
-    console.log('onblur'+e.target.value)
+    //('onblur'+e.target.value)
 
     const { value, valid: oldValid } = this.state;
+    
     const { onValidityChange, onChange } = this.props;
     const dateValue = unformat(value);
     const valid = value === '' || dateValue instanceof Date;
-    console.log(dateValue+"dateValue")
+    //(dateValue+"dateValue")
     if (valid !== oldValid || onValidityChange) {
-      console.log("onValidityChange")
+      //("onValidityChange")
       onValidityChange(e, valid);
     }
     this.setState({ focused: false, valid:true });
     if (valid){
-      console.log("onvalid")
+      //("onvalid")
       
       onChange(e, dateValue);
     }
   }
 
   onChange(e) {
-    console.log('onchange'+e.target.value)
+    //('onchange'+e.target.value)
 
     if (e.target.value.match(/^[\d-]*$/)) {
       this.setState({ value: e.target.value });
@@ -85,12 +84,12 @@ export default class DateInput extends React.Component {
     const className = (!valid && !focused) ? 'invalid' : null;
     let displayValue
     if(focused||!valid){
-      console.log("valid if");
+      //("valid if");
       displayValue=value;
     }else{
-      console.log("else plays"+origValue);
+      //("else plays"+origValue);
       displayValue =displayFormat(origValue);
-      console.log(displayValue+" displayValue")
+      //(displayValue+" displayValue")
     }
     return (
       <Form.Control

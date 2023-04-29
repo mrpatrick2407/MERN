@@ -7,7 +7,7 @@ function jsondatereviver(key,value){
     return value
 }
 
-export async function graphqlendpoint(query, variables = {}) {
+export async function graphqlendpoint(query, variables = {},showError=null) {
     try {
     const response = await fetch( '/graphql', {
         method: 'POST',
@@ -21,13 +21,13 @@ export async function graphqlendpoint(query, variables = {}) {
         const error = result.errors[0];
         if (error.extensions.code == 'BAD_USER_INPUT') {
         const details = error.extensions.exception.errors.join('\n ');
-        alert(`${error.message}:\n ${details}`);
+        if (showError) showError(`${error.message}:\n ${details}`);
         } else {
-        alert(`${error.extensions.code}: ${error.message}`);
+            showError(`${error.extensions.code}: ${error.message}`);
         }
     }
     return result.data;
     } catch (e) {
-    alert(`Error in sending data to server: ${e.message}`);
+        if (showError) showError(`Error in sending data to server: ${e.message}`);
     }
 }

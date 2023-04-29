@@ -8,16 +8,22 @@ import IssueDetails from './IssueDetail.jsx'
 import {graphqlendpoint} from './graphqlendppoint.js'
 import {FormLabel} from'react-bootstrap'
 import {Card} from 'react-bootstrap'
-
+import Toast from './Toast.jsx';
 
 
   export default  class IssueList extends React.Component{
     constructor(){
         super();
-        this.state={issues:[]}
+        this.state={issues:[],toastmessage:'',
+        toasttype:"success",
+        toastshowing:false
+        ,}
         this.createissue=this.createissue.bind(this);
         this.closeIssue=this.closeIssue.bind(this);
         this.deleteissue=this.deleteissue.bind(this);
+        this.showsuccess=this.showsuccess.bind(this);
+        this.showerror=this.showerror.bind(this);
+        this.dismiss=this.dismiss.bind(this);
     }
     componentDidMount(){
         this.loadData()
@@ -29,6 +35,20 @@ import {Card} from 'react-bootstrap'
             this.loadData()
         }
     }
+    showsuccess(mess){
+        this.setState({toastmessage:mess,toasttype:"success",toastshowing:true})
+        console.log("Debugging Toast"+this.state.toastshowing)
+    
+       }
+       showerror(mess){
+        this.setState({toastmessage:mess,toasttype:"danger",toastshowing:true})
+      
+       }
+       dismiss(){
+      this.setState({toastshowing:false})
+       }
+    
+
     async loadData(){
         const {location:{search}}=this.props;
         const params=new URLSearchParams(search);
@@ -52,8 +72,9 @@ import {Card} from 'react-bootstrap'
           }`;
     
 
-    const data =await graphqlendpoint(query,vars);
+    const data =await graphqlendpoint(query,vars,this.showerror);
     if(data){
+        this.showsuccess("Issues loaded")
         this.setState({issues:data.issueList})
     }
     }
@@ -115,14 +136,18 @@ import {Card} from 'react-bootstrap'
             }
         }`;
 
-        const data =await graphqlendpoint(query,{issue});
+        const data =await graphqlendpoint(query,{issue},this.showerror);
         if(data){
+            this.showsuccess("Created successfully")
             this.loadData();
         }
     }
     
     render(){
         const { match } = this.props;
+        const toastmessage=this.state.toastmessage;
+        const toastshowing=this.state.toastshowing;
+        const toasttype=this.state.toasttype;
         return (
             <React.Fragment>
                 <Card >
@@ -144,7 +169,7 @@ import {Card} from 'react-bootstrap'
                          <IssueAdd createIssue={this.createissue}/>
                     </Card.Body>
                 </Card>
-            
+            <Toast showing={toastshowing} className={toasttype} onDismiss={this.dismiss}>{toastmessage}</Toast>
                 <Switch>
               <Route path={`/issues/:id`} component={IssueDetails} />
                 </Switch>

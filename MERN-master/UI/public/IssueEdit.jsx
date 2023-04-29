@@ -4,11 +4,19 @@ import { graphqlendpoint } from "./graphqlendppoint";
 import {Link} from 'react-router-dom'
 import TextInput from "./TextInput.jsx";
 import {Button, FormLabel} from 'react-bootstrap'
-import { Form,Card,InputGroup,Row,Col } from "react-bootstrap";
+import { Form,Card,InputGroup,Row,Col,Alert } from "react-bootstrap";
+import {useState} from 'react';
+import Toast from "./Toast.jsx";
 export default class IssueEdit extends React.Component {
   constructor() {
     super();
     this.state = { 
+      showvalmessage:false
+,
+toastmessage:'',
+toasttype:"success",
+toastshowing:false
+,
         issue: {
           id: '',
           title: '',
@@ -20,11 +28,16 @@ export default class IssueEdit extends React.Component {
           status: '',
           effort: '',
         },
-        invalidfields:{}
+        invalidfields:{},
       };
     this.onChange = this.onChange.bind(this);
     this.handler=this.handler.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
+    this.show=this.show.bind(this);
+    this.showsuccess=this.showsuccess.bind(this);
+    this.showerror=this.showerror.bind(this);
+    this.dismiss=this.dismiss.bind(this);
+    
   }
   componentDidMount() {
     this.loaddata();
@@ -63,10 +76,23 @@ if((name=='due'||name=='created') && val!==null){
     })
   }
 
+  showsuccess(mess){
+    this.setState({toastmessage:mess,toasttype:"success",toastshowing:true})
+    console.log("Debugging Toast"+this.state.toastshowing)
+
+   }
+   showerror(mess){
+    this.setState({toastmessage:mess,toasttype:"danger",toastshowing:true})
+  
+   }
+   dismiss(){
+  this.setState({toastshowing:false})
+   }
 
 
   async handler(e){
     e.preventDefault();
+    this.show()
     const issue=this.state.issue;
     const query=`mutation IssueUpdate($id: Int!, $changes: Issueupdateinput!) {
       issueUpdate(id: $id, Changes: $changes) {
@@ -74,9 +100,10 @@ if((name=='due'||name=='created') && val!==null){
         }
       }`
       const {_id,id,created,...changes}=issue;
-      const data= await graphqlendpoint(query,{id,changes})
+      const data= await graphqlendpoint(query,{id,changes},this.showerror)
       console.log(data.issueUpdate.title)
      if(data){
+      this.showsuccess("Updated successfully")
       console.log(data.issueUpdate.id)
         this.setState({issue: {
           id:id,
@@ -94,6 +121,10 @@ if((name=='due'||name=='created') && val!==null){
       }
 
   }
+  
+
+
+
   async loaddata() {
     const id = parseInt(this.props.match.params.id);
     const query = `query Issue($issueId: Int!) {
@@ -125,16 +156,29 @@ if((name=='due'||name=='created') && val!==null){
       this.setState({ issue: {} });
     }
   }
+ 
+  show(){
+    this.setState({ showvalmessage: true });
 
-  
+  }
+ 
+
+
   render() {
+
     const issue = this.state.issue;
     var created=issue.created;
+    const showvalmessag=this.state.showvalmessage
    const {invalidfields}=this.state;
+   const toastmessage=this.state.toastmessage;
+   const toastshowing=this.state.toastshowing;
+   const toasttype=this.state.toasttype;
+   console.log(toastmessage+" "+toastshowing+" "+toasttype)
    console.log("parent edit"+issue.due)
    let messgae;
-   if(Object.keys(invalidfields).length!==0){
-    messgae=(<div className="error">Please enter the correct date</div>)
+   console.log("cal message"+showvalmessag)
+   if(Object.keys(invalidfields).length!==0 && showvalmessag){
+    messgae=(<Alert onClose={()=>{this.setState({showvalmessag:false})}} variant="danger" dismissible><Alert.Heading>Oh Snap ! Check your input again</Alert.Heading><p>Please enter the correct date</p></Alert>)
    }
     return (
       <Col lg={6}>
@@ -237,7 +281,11 @@ if((name=='due'||name=='created') && val!==null){
           </Col>
            </Row>
         </Form.Group>
-        {messgae}
+        <Form.Group>
+          {messgae}
+        </Form.Group>
+        
+        <Toast variant={toasttype} showing={toastshowing}  onDismiss={this.dismiss}>{toastmessage}</Toast>
         <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id - 1}`}>Prev</Link> {" | "}{" "}
         <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id + 1}`}>Next</Link>{" "}
     </Form>

@@ -53,6 +53,8 @@ async function issueDelete(_,{id}){
     if(res){
       const del= await db.collection('issues').deleteOne({id});
       if(del){
+        const result = await db.collection('counters').findOneAndUpdate({ _id: 'issues' }, { $inc: { current: -1 } }, { returnOriginal: false });
+
         return true
       }else{
         return false;
@@ -84,7 +86,7 @@ function validateIssue(_, { issue }) { const errors = []; if (issue.title.length
 async function getNextSequence(name) {
   const result = await db.collection('counters').findOneAndUpdate({ _id: name }, { $inc: { current: 1 } }, { returnOriginal: false });
   console.log(result);
-  return result.value.current;
+  return result.value.current+1;
 }
 
 async function issueAdd(_, { issue }) {

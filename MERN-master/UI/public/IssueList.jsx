@@ -138,6 +138,7 @@ import IssueAdd from './IssueAdd.jsx';
 
         const data =await graphqlendpoint(query,{issue},this.showerror);
         if(data){
+
             this.showsuccess("Created successfully")
             this.loadData();
         }
@@ -152,7 +153,7 @@ import IssueAdd from './IssueAdd.jsx';
             <React.Fragment>
                 <Navbar bg='light'>
                 
-                <IssueAdd/>
+                <IssueAdd  createIssue={this.createissue}/>
                
                 </Navbar>
                 <Card >

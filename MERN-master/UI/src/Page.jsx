@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import {BsThreeDotsVertical} from 'react-icons/bs'
 import {IoAdd} from 'react-icons/io5'
 import {Container, Navbar,Nav,NavItem ,Tooltip,OverlayTrigger,NavDropdown,Dropdown} from 'react-bootstrap'
-import Change from './app.jsx'
+
 import IssueAdd from './IssueAdd.jsx'
 function Navi(){
     const Create = (props) => (

@@ -2,7 +2,7 @@
 const path =require('path');
 module.exports={
     mode:'development',
-    entry: { app: ['./public/App.jsx','./public/IssueList.jsx'] },
+    entry: { app: ['./browser/App.jsx','./src/IssueList.jsx'] },
     output:{
         filename:'[name].bundle.js',
         path:path.resolve(__dirname, 'public')

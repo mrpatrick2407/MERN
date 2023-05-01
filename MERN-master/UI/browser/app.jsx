@@ -1,4 +1,4 @@
-import Pages from './Page.jsx'
+import Pages from '../src/Page.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {HashRouter as Router} from 'react-router-dom';

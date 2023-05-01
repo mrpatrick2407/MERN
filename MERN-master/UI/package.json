@@ -8,7 +8,7 @@
     "#start": "UI server. HMR is enabled in dev mode.",
     "start": "nodemon -w uiserver.js -e js,graphql uiserver.js",
     "#lint": "Runs ESLint on all relevant files",
-    "compile": "babel public/app.jsx --out-dir public --watch",
+    "compile": "babel browser/app.jsx --out-dir public --watch",
     "#compile": "Generates JS bundles for production. Use with start.",
     "#watch": "Compile, and recompile on any changes.",
     "watch": "webpack --config web.config.js --watch",

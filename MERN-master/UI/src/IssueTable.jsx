@@ -1,5 +1,6 @@
 import IssueRow from './IssueRow.jsx'
 import {Table} from 'react-bootstrap'
+import React from 'react';
 
 export default function IssueTable (props)
 {

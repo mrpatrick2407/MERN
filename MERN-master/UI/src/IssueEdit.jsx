@@ -7,6 +7,9 @@ import {Button, FormLabel} from 'react-bootstrap'
 import { Form,Card,InputGroup,Row,Col,Alert } from "react-bootstrap";
 import {useState} from 'react';
 import Toast from "./Toast.jsx";
+import React from 'react';
+
+
 export default class IssueEdit extends React.Component {
   constructor() {
     super();

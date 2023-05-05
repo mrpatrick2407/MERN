@@ -1,4 +1,7 @@
 import { Form } from "react-bootstrap";
+import React from 'react';
+
+
 function formatData(data){
     return data!=null?data:"";
 }

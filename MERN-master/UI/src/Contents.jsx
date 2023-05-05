@@ -3,6 +3,8 @@ import IssueList from './IssueList.jsx';
 import IssueReport from './IssueReport.jsx';
 import IssueEdit from './IssueEdit.jsx';
 import {motion,AnimatePresence} from 'framer-motion'
+import IssueAbout from './IssueAbout.jsx';
+import React from 'react';
 
 
 function LocationProvider({children}){
@@ -16,6 +18,7 @@ export default function Content(){
             <Redirect exact from='/' to ='/issues' />
             <Route  path='/issues' component={IssueList} />
             <Route exact path='/report' component={IssueReport} />
+            <Route exact path='/about' component={IssueAbout} />
             <Route exact path='/edit/:id' component={IssueEdit} />
               
            

@@ -1,4 +1,5 @@
 import { Form } from "react-bootstrap";
+import React from 'react';
 
 function format(n){
 return n!=null?n.toString():'';

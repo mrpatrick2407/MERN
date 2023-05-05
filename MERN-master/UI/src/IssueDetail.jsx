@@ -1,7 +1,7 @@
 import {Link,NavLink} from 'react-router-dom';
 import { graphqlendpoint } from './graphqlendppoint.js';
 const datereg = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
-
+import React from 'react';
 
 
 

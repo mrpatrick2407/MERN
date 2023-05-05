@@ -1,35 +1,52 @@
-const express = require('express');
-const enableHMR = (process.env.ENABLE_HMR || 'true') === 'true';
-const path=require('path')
+import path from "path";
+import express from "express";
+import proxy from "http-proxy-middleware";
+import render from "./render.jsx";
+import dotenv from 'dotenv';
 
-
+ 
 
 const app = express();
-const proxy1 = require('http-proxy-middleware');
-require('dotenv').config();
 
-const port = process.env.PORT || 8000;
+dotenv.config();
+const port = process.env.PORT;
 
-
-if(enableHMR){
+if(true){
     const webpack = require('webpack');
     const devMiddleware = require('webpack-dev-middleware');
     const hotMiddleware = require('webpack-hot-middleware');
-    const config = require('../web.config.js');
+    const config = require('../web.config.js')[0];
 config.entry.app.push('webpack-hot-middleware/client');
 config.plugins = config.plugins || [];
 config.plugins.push(new webpack.HotModuleReplacementPlugin());
    
-
 const compiler = webpack(config);
  app.use(devMiddleware(compiler));
   app.use(hotMiddleware(compiler));
 }
 
+if (!process.env.UI_API_ENDPOINT) {
+  process.env.UI_API_ENDPOINT = 'http://localhost:3000/graphql';
+  console.log("process  "+process.env.UI_SERVER_API_ENDPOINT +process.env.UI_API_ENDPOINT)
+}
 
+if (!process.env.UI_SERVER_API_ENDPOINT) {
+  process.env.UI_SERVER_API_ENDPOINT = process.env.UI_API_ENDPOINT;
+}
+
+app.get('/env.js', (req, res) => {
+  const env = { UI_API_ENDPOINT: process.env.UI_API_ENDPOINT };
+  res.send(`window.ENV = ${JSON.stringify(env)}`);
+});
 app.use(express.static('src'));
-app.use('/graphql', proxy1({ target: 'http://localhost:3000' }));
-app.get('',(req,res)=>{
+app.get("/about",(req,res,next)=>{
+  render(req,res,next)
+});
+app.use('/graphql', proxy({ target: 'http://localhost:3000' }));
+app.get('*',(req,res)=>{
   res.sendFile(path.join("src/index.html"));
 })
 app.listen(port, () => { console.log(`Listening onport ${port}`); });
+if(module.hot.accept){
+  module.hot.accept('./render.jsx')
+}

@@ -1,19 +1,19 @@
 const datereg = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
-
 function jsondatereviver(key,value){
     if(datereg.test(value)){
         return new Date(value);
     }
     return value
 }
-
 export async function graphqlendpoint(query, variables = {},showError=null) {
     try {
-    const response = await fetch( '/graphql', {
+       
+    const response = await fetch( 'http://localhost:3000/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ query, variables })
     });
+    
     const body = await response.text();
     const result = JSON.parse(body, jsondatereviver);
 
@@ -29,5 +29,6 @@ export async function graphqlendpoint(query, variables = {},showError=null) {
     return result.data;
     } catch (e) {
         if (showError) showError(`Error in sending data to server: ${e.message}`);
+        return e;
     }
 }

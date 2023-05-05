@@ -2,6 +2,8 @@ import { Link, NavLink ,withRouter} from "react-router-dom";
 import {Button,Tooltip,OverlayTrigger} from 'react-bootstrap'
 import {FaTimes} from 'react-icons/fa'
 import {AiFillDelete,AiTwotoneEdit} from 'react-icons/ai'
+import React from 'react';
+
  function IssueRow(props)
 
 { 

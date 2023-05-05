@@ -1,4 +1,8 @@
-import {Collapse,Alert} from 'react-bootstrap'
+import {Collapse,Alert} from 'react-bootstrap';
+import React from 'react';
+
+
+
 export default class Toast extends React.Component{
 componentDidUpdate(){
     const {showing ,onDismiss} = this.props

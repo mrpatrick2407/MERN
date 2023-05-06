@@ -183,6 +183,7 @@ async function render(req, res) {
     content: {}
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Page_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], null));
   const body = react_dom_server__WEBPACK_IMPORTED_MODULE_1___default().renderToString(ele);
+  console.log("this is the body" + body);
   res.send((0,_template_js__WEBPACK_IMPORTED_MODULE_2__["default"])(body));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (render);
@@ -289,7 +290,8 @@ app.use('/graphql', http_proxy_middleware__WEBPACK_IMPORTED_MODULE_2___default()
   target: 'http://localhost:3000'
 }));
 app.get('*', (req, res) => {
-  res.sendFile(path__WEBPACK_IMPORTED_MODULE_0___default().join("src/index.html"));
+  const indexPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, '../src', 'index.html');
+  res.sendFile(indexPath);
 });
 app.listen(port, () => {
   console.log(`Listening onport ${port}`);
@@ -510,6 +512,7 @@ class IssueAbout extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component
     super();
   }
   render() {
+    console.log("issue about" + _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital);
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "text-center"
     }, JSON.stringify(_store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, JSON.stringify(_store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital.about)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Error"));
@@ -1829,7 +1832,7 @@ function Navi() {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Dropdown.Toggle, {
     variant: "secondary"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_icons_bs__WEBPACK_IMPORTED_MODULE_2__.BsThreeDotsVertical, null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Dropdown.Menu, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Dropdown.Item, {
-    href: "#/about"
+    href: "/about"
   }, "About")))));
 }
 function Footer() {
@@ -2408,7 +2411,7 @@ module.exports = require("path");
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("1fb3f1122a413fe8d6a8")
+/******/ 		__webpack_require__.h = () => ("60ce1b94e5e172ecce1b")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

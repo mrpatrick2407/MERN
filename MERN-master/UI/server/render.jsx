@@ -17,6 +17,8 @@ import IssueFilter from '../src/IssueFilter.jsx';
       <Pages/>
     </StaticRouter>)
     const body=ReactDOMServer.renderToString(ele)
+    console.log("this is the body"+body);
+
     res.send(template(body))
     }
 

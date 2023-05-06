@@ -32,3 +32,4 @@ export async function graphqlendpoint(query, variables = {},showError=null) {
         return e;
     }
 }
+

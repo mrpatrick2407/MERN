@@ -42,7 +42,7 @@ function Navi(){
                    </Dropdown.Toggle >
 
                   <Dropdown.Menu >
-                       <Dropdown.Item   href='#/about' >
+                       <Dropdown.Item   href='/about' >
                            About
                        </Dropdown.Item>
                   </Dropdown.Menu>

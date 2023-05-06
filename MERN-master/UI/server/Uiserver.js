@@ -43,9 +43,10 @@ app.get("/about",(req,res,next)=>{
   render(req,res,next)
 });
 app.use('/graphql', proxy({ target: 'http://localhost:3000' }));
-app.get('*',(req,res)=>{
-  res.sendFile(path.join("src/index.html"));
-})
+app.get('*', (req, res) => {
+  const indexPath = path.join(__dirname, '../src', 'index.html');
+  res.sendFile(indexPath);
+});
 app.listen(port, () => { console.log(`Listening onport ${port}`); });
 if(module.hot.accept){
   module.hot.accept('./render.jsx')

@@ -165,6 +165,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../src/graphqlendppoint.js */ "./src/graphqlendppoint.js");
 /* harmony import */ var _src_store_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../src/store.js */ "./src/store.js");
 /* harmony import */ var _src_IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../src/IssueFilter.jsx */ "./src/IssueFilter.jsx");
+/* harmony import */ var _src_IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../src/IssueAbout.jsx */ "./src/IssueAbout.jsx");
+
 
 
 
@@ -174,8 +176,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function render(req, res) {
-  const query = `query {about}`;
-  const inital = await (0,_src_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_5__.graphqlendpoint)(query);
+  const inital = await _src_IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_8__["default"].fetch();
   console.log("this is the intial value of graphqledpoint fro render.jsx" + JSON.stringify(inital));
   _src_store_js__WEBPACK_IMPORTED_MODULE_6__["default"].inital = inital;
   const ele = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.StaticRouter, {
@@ -184,7 +185,7 @@ async function render(req, res) {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Page_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], null));
   const body = react_dom_server__WEBPACK_IMPORTED_MODULE_1___default().renderToString(ele);
   console.log("this is the body" + body);
-  res.send((0,_template_js__WEBPACK_IMPORTED_MODULE_2__["default"])(body));
+  res.send((0,_template_js__WEBPACK_IMPORTED_MODULE_2__["default"])(body, inital));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (render);
 
@@ -201,7 +202,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ template)
 /* harmony export */ });
-function template(body) {
+function template(body, data) {
   return `<html> 
     <head>
          <style> 
@@ -225,7 +226,7 @@ function template(body) {
     </head> 
              <body> 
                 <div id="con"> ${body} </div> 
-                
+                <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
             </body> 
 </html>`;
 }
@@ -337,7 +338,7 @@ function LocationProvider({
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, null, children);
 }
 function Content() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Redirect, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Redirect, {
     exact: true,
     from: "/",
     to: "/issues"
@@ -356,7 +357,7 @@ function Content() {
     exact: true,
     path: "/edit/:id",
     component: _IssueEdit_jsx__WEBPACK_IMPORTED_MODULE_3__["default"]
-  })));
+  }));
 }
 
 /***/ }),
@@ -505,17 +506,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _store_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store.js */ "./src/store.js");
+/* harmony import */ var _graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./graphqlendppoint.js */ "./src/graphqlendppoint.js");
+
 
 
 class IssueAbout extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  static async fetch() {
+    const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_2__.graphqlendpoint)('query{about}');
+    console.log("data" + data);
+    return data;
+  }
   constructor() {
     super();
+    const apidata = _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital ? _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital : null;
+    if (apidata === null) {
+      this.state = {
+        data: null
+      };
+    } else {
+      this.state = {
+        data: apidata.about
+      };
+    }
+  }
+  componentDidMount() {
+    const api = this.state.data;
+    if (api === null) {
+      const data = IssueAbout.fetch();
+      this.setState({
+        data: data.about
+      });
+    }
   }
   render() {
-    console.log("issue about" + _store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital);
+    const api = this.state.data;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
       className: "text-center"
-    }, JSON.stringify(_store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital) ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, JSON.stringify(_store_js__WEBPACK_IMPORTED_MODULE_1__["default"].inital.about)) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Error"));
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, api));
   }
 }
 
@@ -1811,7 +1838,7 @@ function Navi() {
     expand: "md"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Navbar.Brand, {
     className: "dark"
-  }, "IssueTracker"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Nav, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.NavItem, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
+  }, "ISSUETRACKER"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Nav, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.NavItem, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
     exact: true,
     to: "/",
     className: "nav-link"
@@ -2411,7 +2438,7 @@ module.exports = require("path");
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("60ce1b94e5e172ecce1b")
+/******/ 		__webpack_require__.h = () => ("b4895a8d984bfe5afa80")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

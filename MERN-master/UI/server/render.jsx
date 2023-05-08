@@ -6,10 +6,10 @@ import Pages from '../src/Page.jsx';
 import { graphqlendpoint } from '../src/graphqlendppoint.js';    
 import store from '../src/store.js'
 import IssueFilter from '../src/IssueFilter.jsx';
+import IssueAbout from '../src/IssueAbout.jsx';
 
     async function render(req,res){
-    const query=`query {about}`;
-    const inital= await graphqlendpoint(query);
+    const inital= await IssueAbout.fetch();
     console.log("this is the intial value of graphqledpoint fro render.jsx"+JSON.stringify(inital));
  store.inital=inital;
     const ele=(
@@ -19,7 +19,7 @@ import IssueFilter from '../src/IssueFilter.jsx';
     const body=ReactDOMServer.renderToString(ele)
     console.log("this is the body"+body);
 
-    res.send(template(body))
+    res.send(template(body,inital))
     }
 
 export default render

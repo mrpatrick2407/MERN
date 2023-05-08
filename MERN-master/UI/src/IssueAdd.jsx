@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Button, Modal, Nav, NavLink, Row, Col } from 'react-bootstrap';
 import { NavItem, withRouter } from 'react-router-dom';
-import { IoAdd } from 'react-icons/io5'
+import { IoAdd } from 'react-icons/io5';
+
 
 class IssueAdd extends React.Component {
   constructor(props) {

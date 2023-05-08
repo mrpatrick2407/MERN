@@ -13,7 +13,7 @@ function LocationProvider({children}){
 
 export default function Content(){
     return(
-        <AnimatePresence>
+        
             <Switch >
             <Redirect exact from='/' to ='/issues' />
             <Route  path='/issues' component={IssueList} />
@@ -23,7 +23,7 @@ export default function Content(){
               
            
             </Switch>   
-        </AnimatePresence>
+        
          
     )
 }

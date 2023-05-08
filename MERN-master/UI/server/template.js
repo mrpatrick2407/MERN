@@ -1,4 +1,4 @@
-export default function template(body){
+export default function template(body,data){
     return `<html> 
     <head>
          <style> 
@@ -22,7 +22,7 @@ export default function template(body){
     </head> 
              <body> 
                 <div id="con"> ${body} </div> 
-                
+                <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
             </body> 
 </html>`
 }

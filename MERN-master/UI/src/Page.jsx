@@ -14,7 +14,7 @@ function Navi(){
       );
     return(
             <Navbar  bg="light" expand="md">
-              <Navbar.Brand className="dark">IssueTracker</Navbar.Brand>
+              <Navbar.Brand className="dark">ISSUETRACKER</Navbar.Brand>
               
                 <Nav >
                   <NavItem>

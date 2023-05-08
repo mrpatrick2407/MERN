@@ -3,11 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {BrowserRouter as Router} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-
+import store from '../src/store.js';
 
 const history = createBrowserHistory();
-
-
+store.inital=window.__INITIAL_DATA__;
+console.log("store"+store.inital)
  const ele= (  
     <div>
             <Router  history={history}>
@@ -16,5 +16,5 @@ const history = createBrowserHistory();
     </div>
   
  );
-ReactDOM.render(ele,document.getElementById("con"))
+ReactDOM.hydrate(ele,document.getElementById("con"))
 if (module.hot) { module.hot.accept(); }

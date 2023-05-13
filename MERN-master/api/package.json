@@ -29,7 +29,8 @@
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.2",
     "nodemon": "^2.0.22",
-    "opencommit": "^1.1.24"
+    "opencommit": "^1.1.24",
+    "random-paragraph": "^1.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.21.0",

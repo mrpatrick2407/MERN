@@ -1347,6 +1347,7 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     this.createissue = this.createissue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteissue = this.deleteissue.bind(this);
+    this.restoreissue = this.restoreissue.bind(this);
   }
   componentDidMount() {
     this.loadData();
@@ -1366,7 +1367,19 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
       this.loadData();
     }
   }
-  pagelink() {}
+  restoreissue(issue, index) {
+    this.setState(prevState => {
+      const issues = [...prevState.issues];
+      const firstPart = issues.slice(0, index);
+      const secondPart = issues.slice(index);
+      const updatedIssues = [...firstPart, issue, ...secondPart];
+      const teststring = JSON.stringify(updatedIssues);
+      alert(teststring);
+      return {
+        issues
+      };
+    });
+  }
   async loadData() {
     const {
       location: {
@@ -1455,6 +1468,7 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_6__.graphqlendpoint)(mutation, {
       id
     });
+    let deleted;
     if (data) {
       this.setState(prevState => {
         const newlist = [...prevState.issues];
@@ -1464,12 +1478,16 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
             search: search
           });
         }
-        newlist.splice(index, 1);
-        console.log(newlist);
+        deleted = newlist.splice(index, 1);
         return {
           issues: newlist
         };
       });
+      const undo = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement("span", null, `Deleted issue${id} successfully`, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Button, {
+        variant: "link",
+        onClick: () => this.restoreissue(deleted, index)
+      }, "Undo"));
+      this.props.showsuccess(undo);
     }
   }
   async createissue(issue) {
@@ -2650,7 +2668,7 @@ module.exports = require("path");
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("3d9c559775fb74ef4b4d")
+/******/ 		__webpack_require__.h = () => ("05418eeeb4a6c2be9ea1")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

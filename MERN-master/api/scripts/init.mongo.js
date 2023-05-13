@@ -1,4 +1,6 @@
 db.issues.remove({});
+
+
 const issuesDb = [{
   id: 1, status: 'New', owner: 'Theo', effort: 5, created: new Date('2018-08-16'), due: null, title: 'Error in console',
   description: 'Steps to recreate the problem:' + '\n1. Refresh the browser.' + '\n2. Select "New" in the filter' + '\n3. Refresh the browser again. Note the warning in the console:' + '\n   Warning: Hash history cannot PUSH the same path; a new entry' + '\n   will not be added to the history stack' + '\n4. Click on Add.' + '\n5. There is an error in console, and add doesn\'t work.',},

@@ -6,7 +6,7 @@ import React from 'react';
 import { NavLink, Route, Switch } from 'react-router-dom';
 import IssueDetails from './IssueDetail.jsx'
 import {graphqlendpoint} from './graphqlendppoint.js'
-import {FormLabel, Nav, NavItem, Navbar} from'react-bootstrap'
+import {Button, FormLabel, Nav, NavItem, Navbar} from'react-bootstrap'
 import {Card} from 'react-bootstrap'
 import Toast from './Toast.jsx';
 import IssueAdd from './IssueAdd.jsx';
@@ -30,7 +30,7 @@ function PageLink({page,params,activePage,children}){
         this.createissue=this.createissue.bind(this);
         this.closeIssue=this.closeIssue.bind(this);
         this.deleteissue=this.deleteissue.bind(this);
-        
+        this.restoreissue=this.restoreissue.bind(this);
     }
     componentDidMount(){
         this.loadData()
@@ -42,8 +42,17 @@ function PageLink({page,params,activePage,children}){
             this.loadData()
         }
     }
-    pagelink(){
-
+    restoreissue(issue,index){
+        this.setState((prevState)=>{
+            const issues =[...prevState.issues];
+            const firstPart = issues.slice(0, index);
+            const secondPart = issues.slice(index);
+            const updatedIssues = [...firstPart, issue, ...secondPart];
+            const teststring = JSON.stringify(updatedIssues);
+            alert(teststring)
+            return {issues};
+        })
+        
     }
 
     async loadData(){
@@ -114,19 +123,28 @@ function PageLink({page,params,activePage,children}){
           const {issues}=this.state;
           const {id}=issues[index];
           const data= await graphqlendpoint(mutation,{id});
+          let deleted;
           if(data){
+          
             this.setState((prevState)=>{
                 const newlist=[...prevState.issues];
 
                 if(pathname==`/issues`){
                     history.push({pathname:`/issues`,search:search})
                 }
-                newlist.splice(index, 1);
-                console.log(newlist)
+                 deleted=newlist.splice(index, 1);
+                
 
                 return {issues:newlist};
             });
-            
+            const undo=(
+                <span>
+                    {`Deleted issue${id} successfully`}
+                    <Button variant='link' onClick={()=>this.restoreissue(deleted,index)}>
+                        Undo
+                    </Button>
+                </span>)
+                this.props.showsuccess(undo)
           }
     }
 

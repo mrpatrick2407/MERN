@@ -2,7 +2,7 @@ const express = require('express');
 // getting ApolloServer object from the package
 const { ApolloServer, UserInputError } = require('apollo-server-express');
 const GraphQLDate=require('./graphqldate')
-const { MongoClient } = require('mongodb');
+const { MongoClient, Int32 } = require('mongodb');
 // file sync
 const fs = require('fs');
 // Issues
@@ -24,7 +24,7 @@ const port = process.env.API_SERVER || 3000;
 
 // function start
 // IssuesStore function
-async function issueList(_,{status,effortmin,effortmax}) {
+async function issueCount(_,{status,effortmin,effortmax}){
   const filter={};
   if(status){
     filter.status=status;
@@ -38,11 +38,45 @@ async function issueList(_,{status,effortmin,effortmax}) {
       filter.effort.$lte=effortmax;
     }
   }
-  const issuesDb = await db.collection('issues').find(filter).toArray();
-  console.log(`This is frm issuelist1${issuesDb}`);
+  
+
+    const results=await db.collection('issues').aggregate([{$match:filter},{$group:{_id:{owner:'$owner',status:'$status'},count:{$sum:1}}}]).toArray();
+    const stats = {};
+    console.log(JSON.stringify(results));
+    results.forEach((result) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const { owner, status: statusKey } = result._id;
+    if (!stats[owner]) stats[owner] = { owner };
+    stats[owner][statusKey] = result.count;
+    });
+    return Object.values(stats);
+}
+
+async function issueList(_,{status,effortmin,effortmax,page=1}) {
+  const PAGE_SIZE=10;
+  const filter={};
+  if(status){
+    filter.status=status;
+  }
+  if(effortmin!==undefined ||effortmax!==undefined){
+    filter.effort={};
+    if(effortmax!==undefined){
+      filter.effort.$gte=effortmin;
+    }
+    if(effortmin!==undefined){
+      filter.effort.$lte=effortmax;
+    }
+  }
+  const cursor = await db.collection('issues').find(filter).sort({id:1}).skip(PAGE_SIZE*(page-1)).limit(PAGE_SIZE);
+ 
+  const totalCount = await db.collection('issues').countDocuments(filter);
+  console.log(totalCount)
+  const issuesDb=await cursor.toArray()
+  console.log(JSON.stringify(issuesDb))
+var pages=Math.ceil(totalCount/PAGE_SIZE);
   exports.issuesDb = issuesDb;
-  console.log(`This is frm issuelist${issuesDb}`);
-  return issuesDb;
+ 
+  return {issuesDb,pages};
 }
 
 async function issueDelete(_,{id}){
@@ -129,6 +163,7 @@ const resolvers = {
       const { val } = exports;
       return val;
     },
+    issueCount
   },
   Mutation: {
     setAboutMessage:about.setAboutMessage,

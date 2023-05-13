@@ -9,6 +9,14 @@ enum statustype{
 
 }
 
+type IssueCount{
+owner:String!
+New:Int
+Assigned:Int
+Closed:Int
+Fixed:Int
+}
+
 input Issueinput{
   title: String!
   status: statustype
@@ -39,16 +47,21 @@ _id:ID!
 }
 
 ##### Top level declarations
-
+type issuelistwithpage{
+issuesDb:[Issue!]
+pages:Int
+}
 type Query {
   about: String!
   issueList(status:statustype
   effortmin:Int
-  effortmax:Int): [Issue!]!
+  effortmax:Int,page:Int): issuelistwithpage!
   examplethrow(a:Int,b:Int):Int!
   examplecatchfromquery:Int!
   issueAdd(issue:Issueinput!):Issue!
   issue(id:Int!):Issue
+ issueCount(status:statustype,effortmin:Int,effortmax:Int):[IssueCount]!
+
 }
 
 type Mutation {
@@ -56,4 +69,4 @@ type Mutation {
   issueUpdate(id:Int!,Changes:Issueupdateinput!): Issue!
  examplecatchfrommutation:Int!
  issueDelete(id:Int!):Boolean!
-}
+ }

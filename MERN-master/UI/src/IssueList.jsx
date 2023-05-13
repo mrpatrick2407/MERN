@@ -1,29 +1,36 @@
+
 import IssueFilter from './IssueFilter.jsx';
 import IssueTable from './IssueTable.jsx';
 import URLSearchParams from 'url-search-params';
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { NavLink, Route, Switch } from 'react-router-dom';
 import IssueDetails from './IssueDetail.jsx'
 import {graphqlendpoint} from './graphqlendppoint.js'
 import {FormLabel, Nav, NavItem, Navbar} from'react-bootstrap'
 import {Card} from 'react-bootstrap'
 import Toast from './Toast.jsx';
 import IssueAdd from './IssueAdd.jsx';
+import { Pagination } from 'react-bootstrap';
+import withToast from './withToast.jsx';
 
+const SECTION_SIZE=5;
 
-  export default  class IssueList extends React.Component{
+function PageLink({page,params,activePage,children}){
+    
+    params.set('page',page);
+    
+    if (page === 0) return React.cloneElement(children, { disabled: true })
+    return <NavLink active={page === activePage} to={`/issues/?${params.toString()}`}>{children}</NavLink>
+}
+
+     class IssueList extends React.Component{
     constructor(){
         super();
-        this.state={issues:[],toastmessage:'',
-        toasttype:"success",
-        toastshowing:false
-        ,}
+        this.state={issues:[],pages:null}
         this.createissue=this.createissue.bind(this);
         this.closeIssue=this.closeIssue.bind(this);
         this.deleteissue=this.deleteissue.bind(this);
-        this.showsuccess=this.showsuccess.bind(this);
-        this.showerror=this.showerror.bind(this);
-        this.dismiss=this.dismiss.bind(this);
+        
     }
     componentDidMount(){
         this.loadData()
@@ -35,19 +42,9 @@ import IssueAdd from './IssueAdd.jsx';
             this.loadData()
         }
     }
-    showsuccess(mess){
-        this.setState({toastmessage:mess,toasttype:"success",toastshowing:true})
-        console.log("Debugging Toast"+this.state.toastshowing)
-    
-       }
-       showerror(mess){
-        this.setState({toastmessage:mess,toasttype:"danger",toastshowing:true})
-      
-       }
-       dismiss(){
-      this.setState({toastshowing:false})
-       }
-    
+    pagelink(){
+
+    }
 
     async loadData(){
         const {location:{search}}=this.props;
@@ -56,26 +53,31 @@ import IssueAdd from './IssueAdd.jsx';
         if(params.get('status')){
             vars.status=params.get('status')
         }
+        if(params.get('page')) vars.page=parseInt(params.get('page'))
         if(params.get('effortmin')){vars.effortmin=parseInt(params.get('effortmin'))}
         if(params.get('effortmax')){vars.effortmax=parseInt(params.get('effortmax'))}
-        const query=`query($status: statustype,$effortmin:Int,$effortmax:Int){
-            issueList(status: $status,effortmax:$effortmax,effortmin:$effortmin) {
-            title
-              _id
-              status
-              owner
-              id
-              effort
-              due
-              created
+        const query=`query Issues($page: Int, $status: statustype, $effortmin: Int, $effortmax: Int) {
+            issueList(page: $page, status: $status, effortmin: $effortmin, effortmax: $effortmax) {
+              issuesDb {
+                id
+                owner
+                title
+                status
+                created
+                description
+                due
+                effort
+              }
+              pages
             }
           }`;
     
 
-    const data =await graphqlendpoint(query,vars,this.showerror);
+    const data =await graphqlendpoint(query,vars,this.props.showerror);
     if(data){
-        this.showsuccess("Issues loaded")
-        this.setState({issues:data.issueList})
+        this.props.showsuccess("Issues loaded")
+        this.setState({issues:data.issueList.issuesDb,pages:data.issueList.pages})
+        
     }
     }
 
@@ -136,19 +138,52 @@ import IssueAdd from './IssueAdd.jsx';
             }
         }`;
 
-        const data =await graphqlendpoint(query,{issue},this.showerror);
+        const data =await graphqlendpoint(query,{issue},this.props.showerror);
         if(data){
 
-            this.showsuccess("Created successfully")
+            this.props.showsuccess("Created successfully")
             this.loadData();
         }
     }
     
     render(){
         const { match } = this.props;
-        const toastmessage=this.state.toastmessage;
-        const toastshowing=this.state.toastshowing;
-        const toasttype=this.state.toasttype;
+        const pages=this.state.pages;
+        const {location:{search}}=this.props;
+        const params=new URLSearchParams(search);
+        const page=params.get('page')?parseInt(params.get('page')):1;
+        let items=[];
+        let prevSection=0;
+        let nextSection=6;
+        let prevpage;
+        let nextpage;
+        if(pages){
+      
+        const startPage=((page-1)/SECTION_SIZE)*SECTION_SIZE+1;//startpage will always be multiple of SECTION_SIZE
+       
+        const endPage=Math.min(startPage+SECTION_SIZE-1,pages);
+        
+         prevSection=startPage==1?0:startPage-SECTION_SIZE;
+         nextSection=endPage>=pages?0:startPage+SECTION_SIZE;
+         if(prevSection<0){
+            
+            prevSection=1;
+        }
+          prevpage=`#/issues?page=${prevSection}`;
+          prevpage=prevpage.toString();
+          nextpage=`#/issues?page=${nextSection}`;
+          nextpage=nextpage.toString();
+       
+        for(let i=startPage;i<=endPage;i++){
+        const pagelink=`#/issues?page=${i}`.toString();
+            
+            items.push(
+                <Pagination.Item href={pagelink} active={i===page}>{i}</Pagination.Item>
+            )
+        }
+
+    }
+    
         return (
             <React.Fragment>
                 <Navbar bg='light'>
@@ -159,10 +194,11 @@ import IssueAdd from './IssueAdd.jsx';
                 <Card >
                     <Card.Title>Filter</Card.Title>
                     <Card.Body >
-                <IssueFilter/>
+                <IssueFilter urlbase="/issues"/>
 
                     </Card.Body>
                 </Card>
+                
                 <Card >
                     
                     <Card.Body >
@@ -171,13 +207,25 @@ import IssueAdd from './IssueAdd.jsx';
                     </Card.Body>
                 </Card>
                          
-                    
-            <Toast type={toasttype} showing={toastshowing}  onDismiss={this.dismiss}>{toastmessage}</Toast>
                 <Switch>
               <Route path={`/issues/:id`} component={IssueDetails} />
                 </Switch>
+                {pages && 
+                <Pagination>
+                        <div>
+                        <Pagination.Item disabled={prevSection===0}  href={prevpage}>{'<'}
+                        </Pagination.Item>
+                        </div>
+                        {items}
+                        <div >
+                        <Pagination.Item  href={nextpage}>{'>'}
+                        </Pagination.Item>
+                        </div>
+                </Pagination>
+    }
 
             </React.Fragment>
         );
     }
 }
+export default withToast(IssueList);

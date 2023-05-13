@@ -18,10 +18,12 @@ export default function template(body,data){
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/env.js"></script>
         <script src="/vendor.bundle.js"></script>
-        <script src="/app.bundle.js"></script>
+        <script src="/app.bundle.js"></script> 
     </head> 
              <body> 
-                <div id="con"> ${body} </div> 
+                <div id="con"> ${body} </div>
+                <script src="/vendor.bundle.js"></script>
+                
                 <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
             </body> 
 </html>`

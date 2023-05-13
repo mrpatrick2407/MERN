@@ -7,6 +7,7 @@ const issuesDb = [{
   description: 'There needs to be a border in the bottom in the panel' + ' that appears when clicking on Add',},
 ];
 
+
 db.issues.insertMany(issuesDb);
 const count = db.issues.count();
 console.log(`Inserted:${count}issues`);
@@ -17,6 +18,7 @@ db.issues.createIndex({ status: 1 });
 db.issues.createIndex({ created: 1 });
 db.issues.createIndex({ owner: 1 });
 const issue=db.issues.find({ });
+
 //const issues=db.issues.deleteOne({ id: 2});
 //console.log("deleted"+issues.deletedCount+"sd");
 console.log(issue);

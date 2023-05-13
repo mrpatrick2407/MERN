@@ -222,10 +222,12 @@ function template(body, data) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="/env.js"></script>
         <script src="/vendor.bundle.js"></script>
-        <script src="/app.bundle.js"></script>
+        <script src="/app.bundle.js"></script> 
     </head> 
              <body> 
-                <div id="con"> ${body} </div> 
+                <div id="con"> ${body} </div>
+                <script src="/vendor.bundle.js"></script>
+                
                 <script>window.__INITIAL_DATA__ = ${JSON.stringify(data)}</script>
             </body> 
 </html>`;
@@ -320,11 +322,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _IssueList_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IssueList.jsx */ "./src/IssueList.jsx");
 /* harmony import */ var _IssueReport_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./IssueReport.jsx */ "./src/IssueReport.jsx");
 /* harmony import */ var _IssueEdit_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IssueEdit.jsx */ "./src/IssueEdit.jsx");
-/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! framer-motion */ "framer-motion");
-/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(framer_motion__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./IssueAbout.jsx */ "./src/IssueAbout.jsx");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./IssueAbout.jsx */ "./src/IssueAbout.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _routes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./routes.js */ "./src/routes.js");
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 
 
@@ -335,29 +337,16 @@ __webpack_require__.r(__webpack_exports__);
 function LocationProvider({
   children
 }) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, null, children);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(AnimatePresence, null, children);
 }
 function Content() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Redirect, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Redirect, {
     exact: true,
     from: "/",
     to: "/issues"
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Route, {
-    path: "/issues",
-    component: _IssueList_jsx__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Route, {
-    exact: true,
-    path: "/report",
-    component: _IssueReport_jsx__WEBPACK_IMPORTED_MODULE_2__["default"]
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Route, {
-    exact: true,
-    path: "/about",
-    component: _IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_5__["default"]
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Route, {
-    exact: true,
-    path: "/edit/:id",
-    component: _IssueEdit_jsx__WEBPACK_IMPORTED_MODULE_3__["default"]
-  }));
+  }), _routes_js__WEBPACK_IMPORTED_MODULE_6__["default"].map(attrs => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_0__.Route, _extends({
+    key: attrs.path
+  }, attrs))));
 }
 
 /***/ }),
@@ -717,7 +706,7 @@ class IssueDetails extends (react__WEBPACK_IMPORTED_MODULE_2___default().Compone
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ IssueEdit)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _DateInput_jsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DateInput.jsx */ "./src/DateInput.jsx");
 /* harmony import */ var _NumInput_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NumInput.jsx */ "./src/NumInput.jsx");
@@ -730,6 +719,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _Toast_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Toast.jsx */ "./src/Toast.jsx");
+/* harmony import */ var _withToast_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./withToast.jsx */ "./src/withToast.jsx");
+
 
 
 
@@ -745,9 +736,6 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
     super();
     this.state = {
       showvalmessage: false,
-      toastmessage: '',
-      toasttype: "success",
-      toastshowing: false,
       issue: {
         id: '',
         title: '',
@@ -765,9 +753,6 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
     this.handler = this.handler.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.show = this.show.bind(this);
-    this.showsuccess = this.showsuccess.bind(this);
-    this.showerror = this.showerror.bind(this);
-    this.dismiss = this.dismiss.bind(this);
   }
   componentDidMount() {
     this.loaddata();
@@ -821,26 +806,6 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
       };
     });
   }
-  showsuccess(mess) {
-    this.setState({
-      toastmessage: mess,
-      toasttype: "success",
-      toastshowing: true
-    });
-    console.log("Debugging Toast" + this.state.toastshowing);
-  }
-  showerror(mess) {
-    this.setState({
-      toastmessage: mess,
-      toasttype: "danger",
-      toastshowing: true
-    });
-  }
-  dismiss() {
-    this.setState({
-      toastshowing: false
-    });
-  }
   async handler(e) {
     e.preventDefault();
     this.show();
@@ -859,10 +824,10 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
     const data = await (0,_graphqlendppoint__WEBPACK_IMPORTED_MODULE_2__.graphqlendpoint)(query, {
       id,
       changes
-    }, this.showerror);
+    }, this.props.showerror);
     console.log(data.issueUpdate.title);
     if (data) {
-      this.showsuccess("Updated successfully");
+      this.props.showsuccess("Updated successfully");
       console.log(data.issueUpdate.id);
       this.setState({
         issue: {
@@ -896,8 +861,9 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
     let vars = {
       issueId: id
     };
-    const data = await (0,_graphqlendppoint__WEBPACK_IMPORTED_MODULE_2__.graphqlendpoint)(query, vars);
+    const data = await (0,_graphqlendppoint__WEBPACK_IMPORTED_MODULE_2__.graphqlendpoint)(query, vars, this.props.showerror);
     if (data) {
+      this.props.showsuccess("Loaded successfully");
       const {
         issue
       } = data;
@@ -1078,11 +1044,7 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
         width: '200px'
       },
       type: "submit"
-    }, "Submit ")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.Form.Group, null, messgae), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(_Toast_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], {
-      type: toasttype,
-      showing: toastshowing,
-      onDismiss: this.dismiss
-    }, toastmessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Link, {
+    }, "Submit ")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.Form.Group, null, messgae), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Link, {
       className: "mb-3 mt-3 ms-3",
       to: `/edit/${issue.id - 1}`
     }, "Prev"), " ", " | ", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_6___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Link, {
@@ -1091,6 +1053,7 @@ class IssueEdit extends (react__WEBPACK_IMPORTED_MODULE_6___default().Component)
     }, "Next"), " ")));
   }
 }
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_withToast_jsx__WEBPACK_IMPORTED_MODULE_8__["default"])(IssueEdit));
 /*
  <table>
           <tbody>
@@ -1252,7 +1215,7 @@ class IssueFilter extends (react__WEBPACK_IMPORTED_MODULE_0___default().Componen
       history
     } = this.props;
     history.push({
-      pathname: '/issues',
+      pathname: this.props.urlbase,
       search
     });
   }
@@ -1328,7 +1291,7 @@ class IssueFilter extends (react__WEBPACK_IMPORTED_MODULE_0___default().Componen
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ IssueList)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IssueFilter.jsx */ "./src/IssueFilter.jsx");
 /* harmony import */ var _IssueTable_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IssueTable.jsx */ "./src/IssueTable.jsx");
@@ -1344,6 +1307,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _Toast_jsx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Toast.jsx */ "./src/Toast.jsx");
 /* harmony import */ var _IssueAdd_jsx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./IssueAdd.jsx */ "./src/IssueAdd.jsx");
+/* harmony import */ var _withToast_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./withToast.jsx */ "./src/withToast.jsx");
 
 
 
@@ -1355,21 +1319,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+const SECTION_SIZE = 5;
+function PageLink({
+  page,
+  params,
+  activePage,
+  children
+}) {
+  params.set('page', page);
+  if (page === 0) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().cloneElement(children, {
+    disabled: true
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.NavLink, {
+    active: page === activePage,
+    to: `/issues/?${params.toString()}`
+  }, children);
+}
 class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component) {
   constructor() {
     super();
     this.state = {
       issues: [],
-      toastmessage: '',
-      toasttype: "success",
-      toastshowing: false
+      pages: null
     };
     this.createissue = this.createissue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteissue = this.deleteissue.bind(this);
-    this.showsuccess = this.showsuccess.bind(this);
-    this.showerror = this.showerror.bind(this);
-    this.dismiss = this.dismiss.bind(this);
   }
   componentDidMount() {
     this.loadData();
@@ -1389,26 +1366,7 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
       this.loadData();
     }
   }
-  showsuccess(mess) {
-    this.setState({
-      toastmessage: mess,
-      toasttype: "success",
-      toastshowing: true
-    });
-    console.log("Debugging Toast" + this.state.toastshowing);
-  }
-  showerror(mess) {
-    this.setState({
-      toastmessage: mess,
-      toasttype: "danger",
-      toastshowing: true
-    });
-  }
-  dismiss() {
-    this.setState({
-      toastshowing: false
-    });
-  }
+  pagelink() {}
   async loadData() {
     const {
       location: {
@@ -1420,29 +1378,34 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     if (params.get('status')) {
       vars.status = params.get('status');
     }
+    if (params.get('page')) vars.page = parseInt(params.get('page'));
     if (params.get('effortmin')) {
       vars.effortmin = parseInt(params.get('effortmin'));
     }
     if (params.get('effortmax')) {
       vars.effortmax = parseInt(params.get('effortmax'));
     }
-    const query = `query($status: statustype,$effortmin:Int,$effortmax:Int){
-            issueList(status: $status,effortmax:$effortmax,effortmin:$effortmin) {
-            title
-              _id
-              status
-              owner
-              id
-              effort
-              due
-              created
+    const query = `query Issues($page: Int, $status: statustype, $effortmin: Int, $effortmax: Int) {
+            issueList(page: $page, status: $status, effortmin: $effortmin, effortmax: $effortmax) {
+              issuesDb {
+                id
+                owner
+                title
+                status
+                created
+                description
+                due
+                effort
+              }
+              pages
             }
           }`;
-    const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_6__.graphqlendpoint)(query, vars, this.showerror);
+    const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_6__.graphqlendpoint)(query, vars, this.props.showerror);
     if (data) {
-      this.showsuccess("Issues loaded");
+      this.props.showsuccess("Issues loaded");
       this.setState({
-        issues: data.issueList
+        issues: data.issueList.issuesDb,
+        pages: data.issueList.pages
       });
     }
   }
@@ -1517,9 +1480,9 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
         }`;
     const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_6__.graphqlendpoint)(query, {
       issue
-    }, this.showerror);
+    }, this.props.showerror);
     if (data) {
-      this.showsuccess("Created successfully");
+      this.props.showsuccess("Created successfully");
       this.loadData();
     }
   }
@@ -1527,27 +1490,62 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     const {
       match
     } = this.props;
-    const toastmessage = this.state.toastmessage;
-    const toastshowing = this.state.toastshowing;
-    const toasttype = this.state.toasttype;
+    const pages = this.state.pages;
+    const {
+      location: {
+        search
+      }
+    } = this.props;
+    const params = new (url_search_params__WEBPACK_IMPORTED_MODULE_2___default())(search);
+    const page = params.get('page') ? parseInt(params.get('page')) : 1;
+    let items = [];
+    let prevSection = 0;
+    let nextSection = 6;
+    let prevpage;
+    let nextpage;
+    if (pages) {
+      const startPage = (page - 1) / SECTION_SIZE * SECTION_SIZE + 1; //startpage will always be multiple of SECTION_SIZE
+
+      const endPage = Math.min(startPage + SECTION_SIZE - 1, pages);
+      prevSection = startPage == 1 ? 0 : startPage - SECTION_SIZE;
+      nextSection = endPage >= pages ? 0 : startPage + SECTION_SIZE;
+      if (prevSection < 0) {
+        prevSection = 1;
+      }
+      prevpage = `#/issues?page=${prevSection}`;
+      prevpage = prevpage.toString();
+      nextpage = `#/issues?page=${nextSection}`;
+      nextpage = nextpage.toString();
+      for (let i = startPage; i <= endPage; i++) {
+        const pagelink = `#/issues?page=${i}`.toString();
+        items.push( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Pagination.Item, {
+          href: pagelink,
+          active: i === page
+        }, i));
+      }
+    }
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement((react__WEBPACK_IMPORTED_MODULE_3___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Navbar, {
       bg: "light"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(_IssueAdd_jsx__WEBPACK_IMPORTED_MODULE_9__["default"], {
       createIssue: this.createissue
-    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card.Title, null, "Filter"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(_IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_0__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(_IssueTable_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card.Title, null, "Filter"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(_IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_0__["default"], {
+      urlbase: "/issues"
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Card.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(_IssueTable_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
       deleteissue: this.deleteissue,
       closeIssue: this.closeIssue,
       issues: this.state.issues
-    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(_Toast_jsx__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      type: toasttype,
-      showing: toastshowing,
-      onDismiss: this.dismiss
-    }, toastmessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.Route, {
       path: `/issues/:id`,
       component: _IssueDetail_jsx__WEBPACK_IMPORTED_MODULE_5__["default"]
-    })));
+    })), pages && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Pagination, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Pagination.Item, {
+      disabled: prevSection === 0,
+      href: prevpage
+    }, '<')), items, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Pagination.Item, {
+      href: nextpage
+    }, '>'))));
   }
 }
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_withToast_jsx__WEBPACK_IMPORTED_MODULE_10__["default"])(IssueList));
 
 /***/ }),
 
@@ -1560,14 +1558,107 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ IssueReport)
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "react-bootstrap");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./IssueFilter.jsx */ "./src/IssueFilter.jsx");
+/* harmony import */ var url_search_params__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! url-search-params */ "url-search-params");
+/* harmony import */ var url_search_params__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(url_search_params__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./graphqlendppoint.js */ "./src/graphqlendppoint.js");
+/* harmony import */ var _withToast_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./withToast.jsx */ "./src/withToast.jsx");
 
-function IssueReport() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "Placeholder");
+
+
+
+
+
+class IssueReport extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      stats: ''
+    };
+    this.loaddata = this.loaddata.bind(this);
+  }
+  componentDidMount() {
+    this.loaddata();
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.search !== this.props.location.search) {
+      this.loaddata();
+    }
+  }
+  async loaddata() {
+    const {
+      location: {
+        search
+      }
+    } = this.props;
+    const params = new (url_search_params__WEBPACK_IMPORTED_MODULE_3___default())(search);
+    const vars = {};
+    if (params.get('status')) {
+      vars.status = params.get('status');
+    }
+    if (params.get('effortmin')) {
+      vars.effortmin = parseInt(params.get('effortmin'));
+    }
+    if (params.get('effortmax')) {
+      vars.effortmax = parseInt(params.get('effortmax'));
+    }
+    const query = `query IssueCount( $status: statustype, $effortmin: Int, $effortmax: Int) {
+            issueCount( status: $status, effortmin: $effortmin, effortmax: $effortmax) {
+              Assigned
+              Closed
+              Fixed
+              New
+              owner
+            }
+          }`;
+    const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_4__.graphqlendpoint)(query, vars, this.props.showerror);
+    console.log(data);
+    if (data) {
+      this.props.showsuccess("Data Loaded Sucessfully");
+      this.setState({
+        stats: data.issueCount
+      });
+    } else {
+      this.setState({
+        stats: ''
+      });
+    }
+  }
+  render() {
+    const statuses = ["New", "Assigned", "Fixed", "Closed"];
+    const {
+      stats
+    } = this.state;
+    const headercolumns = statuses.map(status => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", {
+      key: status
+    }, status));
+    let statRows;
+    if (stats) {
+      statRows = stats.map(counts => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tr", {
+        key: counts.owner
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", null, counts.owner), statuses.map(status => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("td", {
+        key: status
+      }, counts[status]))));
+    } else {
+      statRows = null;
+    }
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.Card, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.Card.Title, null, "Filter"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.Card.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_IssueFilter_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      urlbase: "/report"
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.Table, {
+      striped: true,
+      bordered: true,
+      hover: true,
+      responsive: "sm"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("th", null, "Owner"), headercolumns), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("tbody", null, statRows)));
+  }
 }
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_withToast_jsx__WEBPACK_IMPORTED_MODULE_5__["default"])(IssueReport));
 
 /***/ }),
 
@@ -1731,6 +1822,27 @@ function IssueTable(props) {
     responsive: "sm"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "ID"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Status"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Owner"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Created"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Effort"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Due"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Title"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default().createElement("tbody", null, issueRows));
 }
+
+/***/ }),
+
+/***/ "./src/NotFound.jsx":
+/*!**************************!*\
+  !*** ./src/NotFound.jsx ***!
+  \**************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function NotFound() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "Page Not Found");
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NotFound);
 
 /***/ }),
 
@@ -2023,6 +2135,7 @@ function jsondatereviver(key, value) {
 }
 async function graphqlendpoint(query, variables = {}, showError = null) {
   try {
+    console.log("urgent");
     const response = await fetch('http://localhost:3000/graphql', {
       method: 'POST',
       headers: {
@@ -2053,6 +2166,47 @@ async function graphqlendpoint(query, variables = {}, showError = null) {
 
 /***/ }),
 
+/***/ "./src/routes.js":
+/*!***********************!*\
+  !*** ./src/routes.js ***!
+  \***********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IssueAbout.jsx */ "./src/IssueAbout.jsx");
+/* harmony import */ var _IssueEdit_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IssueEdit.jsx */ "./src/IssueEdit.jsx");
+/* harmony import */ var _IssueList_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./IssueList.jsx */ "./src/IssueList.jsx");
+/* harmony import */ var _IssueReport_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./IssueReport.jsx */ "./src/IssueReport.jsx");
+/* harmony import */ var _NotFound_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./NotFound.jsx */ "./src/NotFound.jsx");
+
+
+
+
+
+const routes = [{
+  path: '/issues/:id?',
+  component: _IssueList_jsx__WEBPACK_IMPORTED_MODULE_2__["default"]
+}, {
+  path: '/edit/:id',
+  component: _IssueEdit_jsx__WEBPACK_IMPORTED_MODULE_1__["default"]
+}, {
+  path: '/report',
+  component: _IssueReport_jsx__WEBPACK_IMPORTED_MODULE_3__["default"]
+}, {
+  path: '/about',
+  component: _IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_0__["default"]
+}, {
+  path: '*',
+  component: _NotFound_jsx__WEBPACK_IMPORTED_MODULE_4__["default"]
+}];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (routes);
+
+/***/ }),
+
 /***/ "./src/store.js":
 /*!**********************!*\
   !*** ./src/store.js ***!
@@ -2066,6 +2220,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 const store = {};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);
+
+/***/ }),
+
+/***/ "./src/withToast.jsx":
+/*!***************************!*\
+  !*** ./src/withToast.jsx ***!
+  \***************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ withToast)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Toast_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Toast.jsx */ "./src/Toast.jsx");
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+
+function withToast(OriginalComponent) {
+  return class ToastWrapper extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+    constructor(props) {
+      super(props);
+      this.state = {
+        toastmessage: '',
+        toasttype: "success",
+        toastshowing: false
+      };
+      this.showsuccess = this.showsuccess.bind(this);
+      this.showerror = this.showerror.bind(this);
+      this.dismiss = this.dismiss.bind(this);
+    }
+    showsuccess(mess) {
+      this.setState({
+        toastmessage: mess,
+        toasttype: "success",
+        toastshowing: true
+      });
+      console.log("Debugging Toast" + this.state.toastshowing);
+    }
+    showerror(mess) {
+      this.setState({
+        toastmessage: mess,
+        toasttype: "danger",
+        toastshowing: true
+      });
+    }
+    dismiss() {
+      this.setState({
+        toastshowing: false
+      });
+    }
+    render() {
+      const toastmessage = this.state.toastmessage;
+      const toasttype = this.state.toasttype;
+      const toastshowing = this.state.toastshowing;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(OriginalComponent, _extends({
+        showsuccess: this.showsuccess,
+        showerror: this.showerror,
+        dismiss: this.dismiss
+      }, this.props)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Toast_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        type: toasttype,
+        showing: toastshowing,
+        onDismiss: this.dismiss
+      }, toastmessage));
+    }
+  };
+}
 
 /***/ }),
 
@@ -2174,17 +2397,6 @@ module.exports = require("dotenv");
 
 "use strict";
 module.exports = require("express");
-
-/***/ }),
-
-/***/ "framer-motion":
-/*!********************************!*\
-  !*** external "framer-motion" ***!
-  \********************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("framer-motion");
 
 /***/ }),
 
@@ -2438,7 +2650,7 @@ module.exports = require("path");
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("b4895a8d984bfe5afa80")
+/******/ 		__webpack_require__.h = () => ("3d9c559775fb74ef4b4d")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

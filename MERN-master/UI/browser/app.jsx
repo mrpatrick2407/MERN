@@ -1,7 +1,7 @@
 import Pages from '../src/Page.jsx'
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router} from 'react-router-dom';
+import {HashRouter as Router} from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import store from '../src/store.js';
 
@@ -16,5 +16,7 @@ console.log("store"+store.inital)
     </div>
   
  );
-ReactDOM.hydrate(ele,document.getElementById("con"))
+ const root=document.getElementById("con");
+
+ReactDOM.hydrate(ele,root)
 if (module.hot) { module.hot.accept(); }

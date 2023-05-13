@@ -51,7 +51,7 @@ class IssueFilter extends React.Component{
 
         const {history}=this.props;
         history.push({
-                    pathname:'/issues',
+                    pathname:this.props.urlbase,
                     search
         });        
         }

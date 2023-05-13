@@ -8,18 +8,15 @@ import { Form,Card,InputGroup,Row,Col,Alert } from "react-bootstrap";
 import {useState} from 'react';
 import Toast from "./Toast.jsx";
 import React from 'react';
+import withToast from "./withToast.jsx";
 
-
-export default class IssueEdit extends React.Component {
+ class IssueEdit extends React.Component {
   constructor() {
     super();
     this.state = { 
       showvalmessage:false
 ,
-toastmessage:'',
-toasttype:"success",
-toastshowing:false
-,
+
         issue: {
           id: '',
           title: '',
@@ -37,9 +34,7 @@ toastshowing:false
     this.handler=this.handler.bind(this);
     this.onValidityChange = this.onValidityChange.bind(this);
     this.show=this.show.bind(this);
-    this.showsuccess=this.showsuccess.bind(this);
-    this.showerror=this.showerror.bind(this);
-    this.dismiss=this.dismiss.bind(this);
+    
     
   }
   componentDidMount() {
@@ -79,18 +74,7 @@ if((name=='due'||name=='created') && val!==null){
     })
   }
 
-  showsuccess(mess){
-    this.setState({toastmessage:mess,toasttype:"success",toastshowing:true})
-    console.log("Debugging Toast"+this.state.toastshowing)
-
-   }
-   showerror(mess){
-    this.setState({toastmessage:mess,toasttype:"danger",toastshowing:true})
   
-   }
-   dismiss(){
-  this.setState({toastshowing:false})
-   }
 
 
   async handler(e){
@@ -103,10 +87,10 @@ if((name=='due'||name=='created') && val!==null){
         }
       }`
       const {_id,id,created,...changes}=issue;
-      const data= await graphqlendpoint(query,{id,changes},this.showerror)
+      const data= await graphqlendpoint(query,{id,changes},this.props.showerror)
       console.log(data.issueUpdate.title)
      if(data){
-      this.showsuccess("Updated successfully")
+      this.props.showsuccess("Updated successfully")
       console.log(data.issueUpdate.id)
         this.setState({issue: {
           id:id,
@@ -145,8 +129,9 @@ if((name=='due'||name=='created') && val!==null){
           }`;
 
     let vars = { issueId: id };
-    const data = await graphqlendpoint(query, vars);
+    const data = await graphqlendpoint(query, vars,this.props.showerror);
     if (data) {
+      this.props.showsuccess("Loaded successfully")
         const { issue } = data;
         //issue.due = issue.due ? issue.due.toDateString() : "";
         issue.created = issue.created ? issue.created.toDateString() : "";
@@ -288,7 +273,7 @@ if((name=='due'||name=='created') && val!==null){
           {messgae}
         </Form.Group>
         
-        <Toast type={toasttype} showing={toastshowing}  onDismiss={this.dismiss}>{toastmessage}</Toast>
+       
         <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id - 1}`}>Prev</Link> {" | "}{" "}
         <Link className="mb-3 mt-3 ms-3" to={`/edit/${issue.id + 1}`}>Next</Link>{" "}
     </Form>
@@ -297,6 +282,7 @@ if((name=='due'||name=='created') && val!==null){
     )
   }
 }
+export default withToast(IssueEdit);
 /*
  <table>
           <tbody>

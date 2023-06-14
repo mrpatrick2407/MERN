@@ -8,13 +8,14 @@ const fs = require('fs');
 // Issues
 require('dotenv').config();
 const about=require('./aboutmessage')
-
-
-
-
-
+const auth=require('./signinauth.js')
+const cookieParser= require('cookie-parser');
 
 const app = express();
+app.use('/auth',auth.routes)
+app.use(cookieParser());
+
+
 const enable = process.env.ENABLE_CORS || true;
 let db;
 
@@ -42,7 +43,6 @@ async function issueCount(_,{status,effortmin,effortmax}){
 
     const results=await db.collection('issues').aggregate([{$match:filter},{$group:{_id:{owner:'$owner',status:'$status'},count:{$sum:1}}}]).toArray();
     const stats = {};
-    console.log(JSON.stringify(results));
     results.forEach((result) => {
     // eslint-disable-next-line no-underscore-dangle
     const { owner, status: statusKey } = result._id;
@@ -52,7 +52,7 @@ async function issueCount(_,{status,effortmin,effortmax}){
     return Object.values(stats);
 }
 
-async function issueList(_,{status,effortmin,effortmax,page=1}) {
+async function issueList(_,{status,search,effortmin,effortmax,page=1}) {
   const PAGE_SIZE=10;
   const filter={};
   if(status){
@@ -67,13 +67,15 @@ async function issueList(_,{status,effortmin,effortmax,page=1}) {
       filter.effort.$lte=effortmax;
     }
   }
+if(search){
+  filter.$text={$search:search};
+}
+
   const cursor = await db.collection('issues').find(filter).sort({id:1}).skip(PAGE_SIZE*(page-1)).limit(PAGE_SIZE);
  
   const totalCount = await db.collection('issues').countDocuments(filter);
-  console.log(totalCount)
   const issuesDb=await cursor.toArray()
-  console.log(JSON.stringify(issuesDb))
-var pages=Math.ceil(totalCount/PAGE_SIZE);
+  var pages=Math.ceil(totalCount/PAGE_SIZE);
   exports.issuesDb = issuesDb;
  
   return {issuesDb,pages};
@@ -117,9 +119,15 @@ async function issue(_, { id }) {
 
 function validateIssue(_, { issue }) { const errors = []; if (issue.title.length < 3) { errors.push('Field "title" must be at least 3 characters long.'); } if (issue.status == 'Assigned' && !issue.owner) { errors.push('Field "owner" is required when status is "Assigned"'); } if (errors.length > 0) { throw new UserInputError('Invalid input(s)', { errors }); } }
 
+function getContext({req}){
+  const {signedIn}=auth.getUser(req)
+  console.log("this s signed i n status"+signedIn)
+  return {signedIn};
+
+}
+
 async function getNextSequence(name) {
   const result = await db.collection('counters').findOneAndUpdate({ _id: name }, { $inc: { current: 1 } }, { returnOriginal: false });
-  console.log(result);
   return result.value.current+1;
 }
 
@@ -166,14 +174,14 @@ const resolvers = {
     issueCount
   },
   Mutation: {
-    setAboutMessage:about.setAboutMessage,
-    issueUpdate,
-  issueDelete,
+    setAboutMessage:auth.mustbesignedin( about.setAboutMessage),
+    issueUpdate:auth.mustbesignedin(issueUpdate),
+  issueDelete:auth.mustbesignedin(issueDelete),
 
-    examplecatchfrommutation: () => {
+    examplecatchfrommutation: auth.mustbesignedin(() => {
       const { val } = exports;
       return val;
-    },
+    },)
   },
   GraphQLDate,
 };
@@ -186,7 +194,10 @@ const server = new ApolloServer({
     console.log(error);
     return error;
   },
+  context:getContext
 });
+
+
 
 async function startServer() {
   await server.start();

@@ -54,6 +54,7 @@ pages:Int
 type Query {
   about: String!
   issueList(status:statustype
+  search:String
   effortmin:Int
   effortmax:Int,page:Int): issuelistwithpage!
   examplethrow(a:Int,b:Int):Int!

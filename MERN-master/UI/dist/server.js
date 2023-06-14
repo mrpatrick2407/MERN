@@ -177,7 +177,6 @@ __webpack_require__.r(__webpack_exports__);
 
 async function render(req, res) {
   const inital = await _src_IssueAbout_jsx__WEBPACK_IMPORTED_MODULE_8__["default"].fetch();
-  console.log("this is the intial value of graphqledpoint fro render.jsx" + JSON.stringify(inital));
   _src_store_js__WEBPACK_IMPORTED_MODULE_6__["default"].inital = inital;
   const ele = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.StaticRouter, {
     location: req.url,
@@ -274,14 +273,17 @@ if (true) {
 }
 if (!process.env.UI_API_ENDPOINT) {
   process.env.UI_API_ENDPOINT = 'http://localhost:3000/graphql';
-  console.log("process  " + process.env.UI_SERVER_API_ENDPOINT + process.env.UI_API_ENDPOINT);
 }
 if (!process.env.UI_SERVER_API_ENDPOINT) {
   process.env.UI_SERVER_API_ENDPOINT = process.env.UI_API_ENDPOINT;
 }
+if (!process.env.UI_AUTH_ENDPOINT) {
+  process.env.UI_AUTH_ENDPOINT = 'http://localhost:3000/auth';
+}
 app.get('/env.js', (req, res) => {
   const env = {
-    UI_API_ENDPOINT: process.env.UI_API_ENDPOINT
+    UI_API_ENDPOINT: process.env.UI_API_ENDPOINT,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID
   };
   res.send(`window.ENV = ${JSON.stringify(env)}`);
 });
@@ -289,9 +291,16 @@ app.use(express__WEBPACK_IMPORTED_MODULE_1___default()["static"]('src'));
 app.get("/about", (req, res, next) => {
   (0,_render_jsx__WEBPACK_IMPORTED_MODULE_3__["default"])(req, res, next);
 });
-app.use('/graphql', http_proxy_middleware__WEBPACK_IMPORTED_MODULE_2___default()({
-  target: 'http://localhost:3000'
-}));
+const apiProxyTarget = process.env.API_PROXY_TARGET;
+if (apiProxyTarget) {
+  console.log(apiProxyTarget);
+  app.use('/graphql', http_proxy_middleware__WEBPACK_IMPORTED_MODULE_2___default()({
+    target: apiProxyTarget
+  }));
+  app.use('/auth', http_proxy_middleware__WEBPACK_IMPORTED_MODULE_2___default()({
+    target: apiProxyTarget
+  }));
+}
 app.get('*', (req, res) => {
   const indexPath = path__WEBPACK_IMPORTED_MODULE_0___default().join(__dirname, '../src', 'index.html');
   res.sendFile(indexPath);
@@ -1347,12 +1356,12 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     this.createissue = this.createissue.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteissue = this.deleteissue.bind(this);
-    this.restoreissue = this.restoreissue.bind(this);
   }
   componentDidMount() {
     this.loadData();
   }
   componentDidUpdate(prevProps) {
+    console.log("Updates issuelist");
     const {
       location: {
         search: prevSearch
@@ -1366,19 +1375,6 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     if (prevSearch != search) {
       this.loadData();
     }
-  }
-  restoreissue(issue, index) {
-    this.setState(prevState => {
-      const issues = [...prevState.issues];
-      const firstPart = issues.slice(0, index);
-      const secondPart = issues.slice(index);
-      const updatedIssues = [...firstPart, issue, ...secondPart];
-      const teststring = JSON.stringify(updatedIssues);
-      alert(teststring);
-      return {
-        issues
-      };
-    });
   }
   async loadData() {
     const {
@@ -1446,11 +1442,12 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     }
   }
   async deleteissue(index) {
-    console.log("delete issue");
-    console.log(index);
-    const mutation = `mutation IssueDelete($id: Int!) {
-            issueDelete(id: $id)
-          }`;
+    const {
+      issues
+    } = this.state;
+    const {
+      id
+    } = issues[index];
     const {
       location: {
         pathname,
@@ -1459,36 +1456,44 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
       history
     } = this.props;
     console.log(pathname + search);
-    const {
-      issues
-    } = this.state;
-    const {
-      id
-    } = issues[index];
-    const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_6__.graphqlendpoint)(mutation, {
-      id
+    console.log("delete issue");
+    let restore;
+    let issue;
+    this.setState(prevState => {
+      const newlist = [...prevState.issues];
+      if (pathname == `/issues`) {
+        history.push({
+          pathname: `/issues`,
+          search: search
+        });
+      }
+      issue = newlist.splice(index, 1);
+      return {
+        issues: newlist
+      };
     });
-    let deleted;
-    if (data) {
-      this.setState(prevState => {
-        const newlist = [...prevState.issues];
-        if (pathname == `/issues`) {
-          history.push({
-            pathname: `/issues`,
-            search: search
-          });
+    const undo = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement("span", null, `Deleted issue${id} successfully`, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Button, {
+      variant: "link",
+      onClick: async (issue, index) => {
+        this.loadData();
+        restore = true;
+      }
+    }, "Undo"));
+    this.props.showsuccess(undo);
+    console.log(index);
+    setTimeout(async () => {
+      if (!restore) {
+        const mutation = `mutation IssueDelete($id: Int!) {
+                    issueDelete(id: $id)
+                  }`;
+        const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_6__.graphqlendpoint)(mutation, {
+          id
+        });
+        if (data) {
+          this.props.showsuccess("Issue deleted successfully");
         }
-        deleted = newlist.splice(index, 1);
-        return {
-          issues: newlist
-        };
-      });
-      const undo = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement("span", null, `Deleted issue${id} successfully`, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_7__.Button, {
-        variant: "link",
-        onClick: () => this.restoreissue(deleted, index)
-      }, "Undo"));
-      this.props.showsuccess(undo);
-    }
+      }
+    }, 4000);
   }
   async createissue(issue) {
     const query = `query issueAdd($issue:Issueinput!) {
@@ -1505,6 +1510,7 @@ class IssueList extends (react__WEBPACK_IMPORTED_MODULE_3___default().Component)
     }
   }
   render() {
+    console.log("Updates issuelist");
     const {
       match
     } = this.props;
@@ -1952,7 +1958,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _Search_jsx__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Search.jsx */ "./src/Search.jsx");
+/* harmony import */ var _SigninNavlink_jsx__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./SigninNavlink.jsx */ "./src/SigninNavlink.jsx");
 function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+
 
 
 
@@ -1981,6 +1991,12 @@ function Navi() {
   }, "Report"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Nav, {
     style: {
       position: 'absolute',
+      right: '125px',
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(_SigninNavlink_jsx__WEBPACK_IMPORTED_MODULE_7__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Nav, {
+    style: {
+      position: 'absolute',
       right: '30px'
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.Dropdown, {
@@ -2004,6 +2020,260 @@ function Pages() {
     fluid: true
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(_Contents_jsx__WEBPACK_IMPORTED_MODULE_0__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_5___default().createElement(Footer, null));
 }
+
+/***/ }),
+
+/***/ "./src/Search.jsx":
+/*!************************!*\
+  !*** ./src/Search.jsx ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _withToast_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./withToast.jsx */ "./src/withToast.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "react-router-dom");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_router_dom__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./graphqlendppoint.js */ "./src/graphqlendppoint.js");
+
+
+
+
+class Search extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor(props) {
+    super(props);
+    this.loadOptions = this.loadOptions.bind(this);
+    this.onChangeSelection = this.onChangeSelection.bind(this);
+  }
+  onChangeSelection({
+    value
+  }) {
+    const {
+      history
+    } = this.props;
+    history.push(`/edit/${value}`);
+  }
+  async loadOptions(term) {
+    if (term < 3) return [];
+    const query = `query IssuesDb($search: String) {
+            issueList(search: $search) {
+              issuesDb {
+                id
+                title
+              }
+            }
+          }`;
+    const data = await (0,_graphqlendppoint_js__WEBPACK_IMPORTED_MODULE_3__.graphqlendpoint)(query, {
+      search: term
+    }, this.props.showError);
+    if (data) {
+      this.props.showsuccess("Success");
+      return data.issueList.issuesDb.map(issue => ({
+        label: `#${issue.id}: ${issue.title}`,
+        value: issue.id
+      }));
+    } else {
+      return [];
+    }
+  }
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Dropdown, {
+      instanceId: "search-select",
+      loadOptions: this.loadOptions,
+      onSelect: this.onChangeSelection
+    });
+  }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_2__.withRouter)((0,_withToast_jsx__WEBPACK_IMPORTED_MODULE_1__["default"])(Search)));
+
+/***/ }),
+
+/***/ "./src/SigninNavlink.jsx":
+/*!*******************************!*\
+  !*** ./src/SigninNavlink.jsx ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "react-bootstrap");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _withToast_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./withToast.jsx */ "./src/withToast.jsx");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jwt-decode */ "jwt-decode");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+class SignInNavLink extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false,
+      modalmount: false,
+      disabled: true,
+      user: {
+        signedIn: false,
+        img: '',
+        givenName: ''
+      }
+    };
+    this.showmodal = this.showmodal.bind(this);
+    this.hidemodal = this.hidemodal.bind(this);
+    this.signin = this.signin.bind(this);
+    this.signout = this.signout.bind(this);
+  }
+  componentDidMount() {
+    const clientId = '612036327662-2ejj7joqr8ql9ufv17mcrtahrjaqm4r8.apps.googleusercontent.com';
+    google.accounts.id.initialize({
+      client_id: clientId,
+      callback: this.signin
+    });
+    google.accounts.id.renderButton(document.getElementById('buttonsignin'), {
+      theme: "filled_blue2",
+      size: "large",
+      text: "signin",
+      shape: "pill"
+    });
+    this.loadData();
+  }
+  async loadData() {
+    const apiEndpoint = "http://localhost:8000/auth";
+    const response = await fetch(`${apiEndpoint}/user`, {
+      method: 'POST'
+    });
+    const body = await response.text();
+    const result = JSON.parse(body);
+    const {
+      signedIn,
+      givenName,
+      image
+    } = result;
+    //alert(signedIn+ " "+givenName+" "+image)
+    this.setState({
+      user: {
+        signedIn: signedIn,
+        givenName: givenName,
+        img: image
+      }
+    });
+  }
+  hidemodal() {
+    this.setState({
+      show: false
+    });
+  }
+  showmodal() {
+    this.setState({
+      show: true
+    });
+  }
+  async signin(response) {
+    try {
+      /*
+      console.log(JSON.stringify(response.credential))
+        const decode=jwtDecode(response.credential)
+      console.log(JSON.stringify(decode))
+      
+      const givenName=decode.given_name
+      const image=decode.picture*/
+      const apiendpoint = '/auth/signin';
+      const res = await fetch(apiendpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          google_token: response.credential
+        })
+      });
+      const body = await res.text();
+      const result = JSON.parse(body);
+      const {
+        signedIn,
+        givenName,
+        image
+      } = result;
+      //alert(signedIn+ " "+givenName+" "+image)
+      this.setState({
+        user: {
+          signedIn: signedIn,
+          givenName: givenName,
+          img: image
+        }
+      });
+      this.props.showsuccess(`Welcome ${givenName}`);
+    } catch (error) {
+      this.props.showerror(error);
+    }
+  }
+  async signout() {
+    const apiendpoint = '/auth/signout';
+    const res = await fetch(apiendpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    this.props.showsuccess('Signed Out');
+    document.getElementById('buttonsignin').hidden = false;
+    this.setState({
+      user: {
+        signedIn: false,
+        givenName: ''
+      }
+    });
+    google.accounts.id.disableAutoSelect();
+  }
+  render() {
+    const user = this.state.user;
+    const img = this.state.user.img;
+    if (user.signedIn) {
+      document.getElementById('buttonsignin').hidden = true;
+      console.log(user.givenName + "this is the given name");
+      if (img) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+          id: "buttonsignin"
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.NavDropdown, {
+          style: {
+            position: 'absolute',
+            right: '20px',
+            top: '10px'
+          },
+          title: user.givenName,
+          id: "basic-nav-dropdown"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.NavDropdown.Item, {
+          onClick: this.signout
+        }, "Sign Out")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+          src: img,
+          style: {
+            position: 'relative',
+            top: '2px',
+            right: '-1.5rem',
+            width: '50px',
+            borderRadius: '50%',
+            border: '1px solid black',
+            height: '50px'
+          }
+        }));
+      }
+    }
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+      id: "buttonsignin"
+    }));
+  }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_withToast_jsx__WEBPACK_IMPORTED_MODULE_2__["default"])(SignInNavLink));
 
 /***/ }),
 
@@ -2120,9 +2390,12 @@ class Toast extends (react__WEBPACK_IMPORTED_MODULE_1___default().Component) {
       in: showing
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", {
       style: {
-        position: 'absolute',
-        bottom: '20px;',
-        left: '20px'
+        position: 'fixed',
+        width: '10rem',
+        zIndex: '99999',
+        height: 'auto',
+        bottom: '1rem',
+        left: '1rem'
       }
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_0__.Alert, {
       variant: type,
@@ -2154,7 +2427,7 @@ function jsondatereviver(key, value) {
 async function graphqlendpoint(query, variables = {}, showError = null) {
   try {
     console.log("urgent");
-    const response = await fetch('http://localhost:3000/graphql', {
+    const response = await fetch('/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -2429,6 +2702,17 @@ module.exports = require("http-proxy-middleware");
 
 /***/ }),
 
+/***/ "jwt-decode":
+/*!*****************************!*\
+  !*** external "jwt-decode" ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("jwt-decode");
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "react" ***!
@@ -2668,7 +2952,7 @@ module.exports = require("path");
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("05418eeeb4a6c2be9ea1")
+/******/ 		__webpack_require__.h = () => ("2bfce03eeca308d30baa")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

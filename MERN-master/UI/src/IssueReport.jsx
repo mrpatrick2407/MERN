@@ -91,6 +91,7 @@ import withToast from './withToast.jsx';
                     <tbody>
                         {statRows}
                     </tbody>
+         
                 </Table>
             </>
         )

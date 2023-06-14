@@ -22,7 +22,12 @@ componentWillUnmount() {
         console.log("Working in toast"+showing +children);
         return(
         <Collapse in={showing}>
-            <div style={{position:'absolute',bottom:'20px;',left:'20px'}}>
+            <div style={{ position: 'fixed',
+              width: '10rem',
+              zIndex:'99999',
+              height: 'auto',
+              bottom: '1rem',
+              left: '1rem',}}>
                 <Alert variant={type} onDismiss={onDismiss}  >
                     {children}
                 </Alert>

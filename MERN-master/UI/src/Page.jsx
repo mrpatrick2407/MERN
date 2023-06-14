@@ -5,6 +5,9 @@ import {IoAdd} from 'react-icons/io5'
 import {Container, Navbar,Nav,NavItem ,Tooltip,OverlayTrigger,NavDropdown,Dropdown} from 'react-bootstrap'
 import React from 'react';
 
+import Search from './Search.jsx'
+import SigninNavlink from './SigninNavlink.jsx'
+
 
 function Navi(){
     const Create = (props) => (
@@ -33,8 +36,14 @@ function Navi(){
                     </NavLink>
                   </NavItem>
                 </Nav>
+
+                <Nav style={{position:'absolute',right:'125px',cursor:"pointer"}} >
                 
+                <SigninNavlink/>
+                </Nav>
+
                 <Nav style={{position:'absolute',right:'30px'}} >
+                  
                 <Dropdown as="div" drop='start'>
                 <Dropdown.Toggle variant='secondary' >
                 <BsThreeDotsVertical/>
@@ -64,7 +73,6 @@ export default function Pages(){
             <Navi/>
             <Container  fluid >
             <Contents/>
-
             </Container>
             <Footer/>
         </div>

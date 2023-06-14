@@ -30,30 +30,19 @@ function PageLink({page,params,activePage,children}){
         this.createissue=this.createissue.bind(this);
         this.closeIssue=this.closeIssue.bind(this);
         this.deleteissue=this.deleteissue.bind(this);
-        this.restoreissue=this.restoreissue.bind(this);
     }
     componentDidMount(){
         this.loadData()
     }   
     componentDidUpdate(prevProps){
+        console.log("Updates issuelist")
         const {location:{search:prevSearch}}=prevProps;
         const {location:{search}}=this.props;
         if(prevSearch!=search){
             this.loadData()
         }
     }
-    restoreissue(issue,index){
-        this.setState((prevState)=>{
-            const issues =[...prevState.issues];
-            const firstPart = issues.slice(0, index);
-            const secondPart = issues.slice(index);
-            const updatedIssues = [...firstPart, issue, ...secondPart];
-            const teststring = JSON.stringify(updatedIssues);
-            alert(teststring)
-            return {issues};
-        })
-        
-    }
+    
 
     async loadData(){
         const {location:{search}}=this.props;
@@ -113,39 +102,52 @@ function PageLink({page,params,activePage,children}){
     }
 
     async deleteissue(index){
-        console.log("delete issue")
-        console.log(index);
-        const mutation=`mutation IssueDelete($id: Int!) {
-            issueDelete(id: $id)
-          }`
-          const {location:{pathname,search},history}=this.props;
+        const {issues}=this.state;
+         const {id}=issues[index];
+        const {location:{pathname,search},history}=this.props;
           console.log(pathname+search)
-          const {issues}=this.state;
-          const {id}=issues[index];
-          const data= await graphqlendpoint(mutation,{id});
-          let deleted;
-          if(data){
-          
-            this.setState((prevState)=>{
-                const newlist=[...prevState.issues];
+        console.log("delete issue")
+        let restore;
+        let issue;
+        this.setState((prevState)=>{
+            const newlist=[...prevState.issues];
 
-                if(pathname==`/issues`){
-                    history.push({pathname:`/issues`,search:search})
-                }
-                 deleted=newlist.splice(index, 1);
-                
+            if(pathname==`/issues`){
+                history.push({pathname:`/issues`,search:search})
+            }
+            issue= newlist.splice(index, 1);
+            
 
-                return {issues:newlist};
-            });
-            const undo=(
-                <span>
-                    {`Deleted issue${id} successfully`}
-                    <Button variant='link' onClick={()=>this.restoreissue(deleted,index)}>
-                        Undo
-                    </Button>
-                </span>)
-                this.props.showsuccess(undo)
-          }
+            return {issues:newlist};
+        });
+        const undo=(
+            <span>
+                {`Deleted issue${id} successfully`}
+                <Button variant='link' onClick={async(issue,index)=>{
+                    this.loadData();
+                    restore=true;
+                    
+                    }}>
+                    Undo
+                </Button>
+            </span>)
+            this.props.showsuccess(undo)
+        console.log(index);
+        setTimeout(async()=>{
+            if(!restore){
+                const mutation=`mutation IssueDelete($id: Int!) {
+                    issueDelete(id: $id)
+                  }`
+                  
+                  
+                  const data= await graphqlendpoint(mutation,{id});
+                  
+                  if(data){
+                  this.props.showsuccess("Issue deleted successfully")
+                  }
+            }
+        },4000)
+        
     }
 
     async createissue(issue){
@@ -155,7 +157,6 @@ function PageLink({page,params,activePage,children}){
             id
             }
         }`;
-
         const data =await graphqlendpoint(query,{issue},this.props.showerror);
         if(data){
 
@@ -165,6 +166,8 @@ function PageLink({page,params,activePage,children}){
     }
     
     render(){
+        console.log("Updates issuelist")
+
         const { match } = this.props;
         const pages=this.state.pages;
         const {location:{search}}=this.props;

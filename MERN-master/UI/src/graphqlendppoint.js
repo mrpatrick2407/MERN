@@ -8,7 +8,7 @@ function jsondatereviver(key,value){
 export async function graphqlendpoint(query, variables = {},showError=null) {
     try {
        console.log("urgent")
-    const response = await fetch( 'http://localhost:3000/graphql', {
+    const response = await fetch( '/graphql', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({ query, variables })

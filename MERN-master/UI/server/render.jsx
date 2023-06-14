@@ -10,8 +10,7 @@ import IssueAbout from '../src/IssueAbout.jsx';
 
     async function render(req,res){
     const inital= await IssueAbout.fetch();
-    console.log("this is the intial value of graphqledpoint fro render.jsx"+JSON.stringify(inital));
- store.inital=inital;
+    store.inital=inital;
     const ele=(
     <StaticRouter location={req.url} content={{}}>
       <Pages/>
